@@ -635,7 +635,7 @@ const schematicsPerPage = 12;
                         data-preview-title={item.title}
                         aria-label={lang === "ja" ? `${item.title} の QR Code を拡大表示` : `放大預覽 ${item.title} QR Code`}
                       >
-                        <img src={href(item.qrImage)} alt={`${item.title} QR Code`} loading="lazy" />
+                        <img src={href(item.qrImage)} alt={`${item.title} QR Code`} loading="lazy" draggable="false" />
                         <span aria-hidden="true"></span>
                       </button>
                       <dl>
@@ -728,7 +728,7 @@ const schematicsPerPage = 12;
           </button>
         </div>
         <div class="lightbox-image">
-          <img src="" alt="" data-lightbox-image />
+          <img src="" alt="" data-lightbox-image draggable="false" />
         </div>
       </div>
     </div>
@@ -1327,6 +1327,9 @@ const schematicsPerPage = 12;
       height: 100%;
       display: block;
       object-fit: contain;
+      -webkit-user-drag: none;
+      user-select: none;
+      -webkit-touch-callout: none;
     }
 
     .schematic-qr > span {
@@ -1620,6 +1623,9 @@ const schematicsPerPage = 12;
       height: 100%;
       display: block;
       object-fit: contain;
+      -webkit-user-drag: none;
+      user-select: none;
+      -webkit-touch-callout: none;
     }
 
     .schematics-page :is(a, button):focus-visible {
@@ -1805,6 +1811,13 @@ const schematicsPerPage = 12;
     let lastPreviewButton: HTMLButtonElement | null = null;
     const schematicsPerPage = 12;
     const isJa = document.documentElement.lang === "ja";
+
+    document.addEventListener("contextmenu", (event) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest(".schematic-qr img, .lightbox-image img")) {
+        event.preventDefault();
+      }
+    });
 
     function updateSchematicPage(panel: HTMLElement, page: number) {
       const cards = Array.from(panel.querySelectorAll<HTMLElement>("[data-schematic-card]"));
