@@ -5,40 +5,40 @@ export type TypeStep = string | { text: string; sub: string[] };
 
 export interface TypeMethodSection {
   title?: string;     // 子章節標題，例："K+1 法（通用版）"；省略時只顯示 tags／steps，
-                      // 用於同一個方法（已有 TypeMethod.name 當白色總標題）底下純粹依
-                      // 版本／條件分段、不需要各自再掛一次橘色小標題的情形
-                      // （例：木箱擊飛依 Switch 1／Switch 2 分兩段）
+  // 用於同一個方法（已有 TypeMethod.name 當白色總標題）底下純粹依
+  // 版本／條件分段、不需要各自再掛一次橘色小標題的情形
+  // （例：木箱擊飛依 Switch 1／Switch 2 分兩段）
   tags?: string[];    // 標籤陣列（顯示為「適合 + badge」），例：["～Ver.1.1.2"]
   intro?: string;     // 該區塊步驟上方的灰色說明句（選填）
   steps?: TypeStep[]; // 該區塊的編號步驟；省略時只顯示標題與 tags，用於「變體名稱」這種
-                      // 純標頭的區塊（例：序章逃脫底下先掛變體名與適用版本，再接各階段區塊）
+  // 純標頭的區塊（例：序章逃脫底下先掛變體名與適用版本，再接各階段區塊）
   note?: string | string[]; // 該區塊步驟下方的灰色備註（可多行）
   videoUrl?: string;  // 該區塊專屬的外部教學影片連結（YouTube 等），顯示於標題列右側
   collapsible?: boolean; // 標題與適合版本可收合為手風琴列，展開後才顯示步驟；用於單一分頁內方法數過多時避免過長捲動
   subtitle?: string;  // 展開後、steps 正上方顯示的橘色小標題，跟 title 不同：title 是手風琴列上
-                      // 永遠可見的觸發文字，subtitle 只在展開後才看得到。用於「一個可收合區塊裡
-                      // 還要再分『外層技巧總稱（觸發用）＋內層實際手法名稱』兩層」的情形。
+  // 永遠可見的觸發文字，subtitle 只在展開後才看得到。用於「一個可收合區塊裡
+  // 還要再分『外層技巧總稱（觸發用）＋內層實際手法名稱』兩層」的情形。
   popover?: { title?: string; steps: TypeStep[] };
-                      // 主流程某個步驟裡「順帶用到的子技巧」的完整步驟。刻意不直接排在
-                      // 主流程下方——並排會讓人以為那是「同一件事的另一種做法」（例如
-                      // 「繼承光弓」底下並排「自家掛框」與「黏手法」，看起來像兩種方案，
-                      // 但黏手法其實只是掛框流程第 11 步用到的工具）。改成由步驟文字裡的
-                      // [[文字|popover]] 連結點開，從屬關係才正確。一個 section 一組，
-                      // 所以連結語法不需要 id。
+  // 主流程某個步驟裡「順帶用到的子技巧」的完整步驟。刻意不直接排在
+  // 主流程下方——並排會讓人以為那是「同一件事的另一種做法」（例如
+  // 「繼承光弓」底下並排「自家掛框」與「黏手法」，看起來像兩種方案，
+  // 但黏手法其實只是掛框流程第 11 步用到的工具）。改成由步驟文字裡的
+  // [[文字|popover]] 連結點開，從屬關係才正確。一個 section 一組，
+  // 所以連結語法不需要 id。
   mapFlow?: (FlowMapStepAction | null)[];
-                      // 「參照流程地圖」的步驟資料，與本區塊的 steps 索引一一對齊（每個區塊
-                      // 各自從 0 算起，跟 steps 各自從 1 編號的邏輯一致）。用法與
-                      // TypeMethod.mapFlow 相同，見該欄位註解；分頁若是 sections 版，
-                      // 步驟單選按鈕改看這裡而非 TypeMethod.mapFlow。
+  // 「參照流程地圖」的步驟資料，與本區塊的 steps 索引一一對齊（每個區塊
+  // 各自從 0 算起，跟 steps 各自從 1 編號的邏輯一致）。用法與
+  // TypeMethod.mapFlow 相同，見該欄位註解；分頁若是 sections 版，
+  // 步驟單選按鈕改看這裡而非 TypeMethod.mapFlow。
 }
 
 export interface TypeMethod {
   tab: string;        // 分頁名稱，例：前跳
   group?: string;     // 分頁分組標籤（同組的分頁按鈕會排在同一行，並在最前面顯示此標籤），例："無過載（Overload-less）"
   dropdownGroup?: string; // 分頁分組成下拉選單（同值的分頁不各自顯示按鈕，改合併成一顆
-                          // 「此值 ▼」的下拉分頁按鈕，點開後才顯示各自的分頁選項），
-                          // 用於同一大類底下有多個版本分支、不想在分頁列一次塞太多按鈕的情形，
-                          // 例："非 Ver.1.0.0"
+  // 「此值 ▼」的下拉分頁按鈕，點開後才顯示各自的分頁選項），
+  // 用於同一大類底下有多個版本分支、不想在分頁列一次塞太多按鈕的情形，
+  // 例："非 Ver.1.0.0"
   tags?: string[];    // 標籤陣列（顯示為「適合 + badge」），例：["先圓後方"]
   difficulty?: string; // 難易度星等 badge（顯示在 tags 右側），例："★★★☆☆"
   timeCost?: string;    // 耗時度星等 badge（顯示在 difficulty 右側），例："★★★☆☆"
@@ -49,33 +49,33 @@ export interface TypeMethod {
   sections?: TypeMethodSection[]; // 多區塊步驟，每區塊各自從 1 開始編號
   video?: string;     // 快速示意影片檔名，例："前跳.MP4"
   videos?: { video: string; title: string }[];
-                      // 快速示意多支影片（與 video 擇一），各自標題＋上下排列，
-                      // 用於同一分頁需要並列示意多種手法的情形（例：Zuggle 分頁
-                      // 同時示意 Invizuggle 與 GDI Chain）
+  // 快速示意多支影片（與 video 擇一），各自標題＋上下排列，
+  // 用於同一分頁需要並列示意多種手法的情形（例：Zuggle 分頁
+  // 同時示意 Invizuggle 與 GDI Chain）
   image?: string;     // 快速示意圖片檔名（與 video 擇一），例："IST.png"
   extraImage?: string; // 快速示意影片下方額外顯示的圖片（與 video 並存，例如流程圖解），例："SLD_Explain.png"；
-                        // 讀取路徑沿用 imageFolder，與 image 共用同一個資料夾設定
+  // 讀取路徑沿用 imageFolder，與 image 共用同一個資料夾設定
   hideDemo?: boolean;  // 切到這個分頁時，「快速示意」整個區塊（含標題）完全不顯示，不落入「示意內容準備中」
-                        // 的空狀態。用於該分頁沒有示意媒體、且刻意不想準備（例如請玩家自行參考相關影片）
-                        // 的情形；只影響該分頁自己，頁面上其他有 video/image 的分頁不受影響。
+  // 的空狀態。用於該分頁沒有示意媒體、且刻意不想準備（例如請玩家自行參考相關影片）
+  // 的情形；只影響該分頁自己，頁面上其他有 video/image 的分頁不受影響。
   note?: string | string[]; // 步驟下方的灰色備註（可多行）
   principle?: string;       // 此分頁的原理說明（覆蓋 TypeContent.principle）
   principleSections?: { title?: string; text?: string; items?: TypeStep[]; collapsible?: boolean }[];
-                            // 此分頁的原理說明分段；可隨流程分頁切換，並支援可收合小節
+  // 此分頁的原理說明分段；可隨流程分頁切換，並支援可收合小節
   principleExtra?: { title?: string; items: TypeStep[] };
-                            // 此分頁原理說明下方的固定附加小節（例："延伸"），只在切到這個分頁時顯示，
-                            // 切到其他分頁會跟著 principle 一起換掉（僅用於 hasDynamicPrinciple 的頁面，
-                            // 即 methods 有設定 principle 的頁面；一般走 content.principleSections 的頁面
-                            // 請直接把「延伸」加進 principleSections 陣列，不要用這個欄位）
+  // 此分頁原理說明下方的固定附加小節（例："延伸"），只在切到這個分頁時顯示，
+  // 切到其他分頁會跟著 principle 一起換掉（僅用於 hasDynamicPrinciple 的頁面，
+  // 即 methods 有設定 principle 的頁面；一般走 content.principleSections 的頁面
+  // 請直接把「延伸」加進 principleSections 陣列，不要用這個欄位）
   subTabs?: TypeMethod[];   // 子分頁（例：合併後的「R0 Cull Zuggle」底下的 In Bound／Out of Bound）。
-                            // 有值時，此分頁本身不直接顯示 tags/sections/steps，改為顯示子分頁按鈕，
-                            // 點擊後才顯示對應子分頁的內容（子分頁沿用同一套欄位，不支援巢狀 subTabs）。
+  // 有值時，此分頁本身不直接顯示 tags/sections/steps，改為顯示子分頁按鈕，
+  // 點擊後才顯示對應子分頁的內容（子分頁沿用同一套欄位，不支援巢狀 subTabs）。
   mapFlow?: (FlowMapStepAction | null)[];
-                            // 「參照流程地圖」的步驟資料，與 steps 索引一一對齊；null＝該步驟沒有
-                            // 地圖行為（該步驟前不顯示單選按鈕）。有值時每個步驟前會多一顆單選按鈕，
-                            // 點擊後在頁面下方的流程地圖顯示該步驟的 Pin／移動軌跡。
-                            // 需搭配 TypeContent.flowMap 一起設定；目前僅支援使用 steps 的方法
-                            // （sections 版需要時再擴充）。
+  // 「參照流程地圖」的步驟資料，與 steps 索引一一對齊；null＝該步驟沒有
+  // 地圖行為（該步驟前不顯示單選按鈕）。有值時每個步驟前會多一顆單選按鈕，
+  // 點擊後在頁面下方的流程地圖顯示該步驟的 Pin／移動軌跡。
+  // 需搭配 TypeContent.flowMap 一起設定；目前僅支援使用 steps 的方法
+  // （sections 版需要時再擴充）。
 }
 
 // 參照流程地圖：單一步驟在地圖上的行為。座標一律用「遊戲內座標 (X, Z)」，
@@ -84,15 +84,15 @@ export interface TypeMethod {
 export interface FlowMapStepAction {
   layer?: "surface" | "sky" | "depths"; // 該步驟所在圖層；未填則沿用地圖目前的圖層
   focus?: { x: number; z: number; zoom?: number };
-                                 // 鏡頭移動目標；zoom 0≈全圖、每 +1 放大一倍（傳給 Leaflet 的 zoom）。
-                                 // 未填 focus 時自動框住該步驟的所有 Pin／軌跡
+  // 鏡頭移動目標；zoom 0≈全圖、每 +1 放大一倍（傳給 Leaflet 的 zoom）。
+  // 未填 focus 時自動框住該步驟的所有 Pin／軌跡
   pins?: { x: number; z: number; label?: string }[];
-                                 // 地點 Pin；label 會顯示為地圖上的常駐標籤
+  // 地點 Pin；label 會顯示為地圖上的常駐標籤
   path?: [number, number][];     // 移動軌跡 [X, Z] 途經點，依序連線並加上方向箭頭
   route?: string;                // objmap 匯出的路線圖檔名（public/totk-prologue escape route/
-                                 // 底下，不含 .json）。可畫多段、跨圖層的箭頭路徑，比 path 適合
-                                 // 長程移動；檔名尾端的圖層清單決定箭頭在哪些圖層 100% 不透明，
-                                 // 其餘圖層降到 20%。詳見 src/lib/flow-route.ts
+  // 底下，不含 .json）。可畫多段、跨圖層的箭頭路徑，比 path 適合
+  // 長程移動；檔名尾端的圖層清單決定箭頭在哪些圖層 100% 不透明，
+  // 其餘圖層降到 20%。詳見 src/lib/flow-route.ts
   routeNote?: string;            // 路線終點 pin 點擊後顯示的簡易步驟說明
 }
 
@@ -154,7 +154,7 @@ export interface TypeContent {
     layoutSrc?: string;    // 點擊互動座標表 JSON 路徑（public/ 下），點擊房間顯示名稱
     legend?: { color: string; label: string }[]; // 色彩圖例（顯示於模型下方）
     transparencyMaterials?: string[]; // 「透明化」開關鈕要調整的材質名稱（不含 "ToTS_" 前綴），
-                                       // 有給值才顯示按鈕，只影響這些材質，其餘（含樓層文字）不受影響
+    // 有給值才顯示按鈕，只影響這些材質，其餘（含樓層文字）不受影響
     transparencyOpacity?: number;     // 透明化後的不透明度（0～1），預設 0.2
   }; // C 區改放可拖曳旋轉的 3D 模型（取代快速示意）
   flowMap?: {
@@ -163,8 +163,8 @@ export interface TypeContent {
     defaultLayer?: "surface" | "sky" | "depths"; // 初始圖層，預設 surface
     note?: string;                     // 地圖下方的灰色備註
     hideStatusHint?: boolean;          // 隱藏地圖工具列預設顯示的操作提示（flowMapStatusDefault）；
-                                        // 該提示是全站共用文案，這裡只是不顯示，不影響其他頁面，
-                                        // 也不影響點擊步驟後動態更新的狀態文字
+    // 該提示是全站共用文案，這裡只是不顯示，不影響其他頁面，
+    // 也不影響點擊步驟後動態更新的狀態文字
     grid?: boolean;                    // 顯示「格線」按鈕：疊上地圖單元格（A～J × 1～8）參考層
     pins?: {
       x: number; z: number;
@@ -173,13 +173,13 @@ export interface TypeContent {
       image?: string;                  // 點擊 Pin 後彈出的實景圖檔名；有值才會變成可點擊
       caption?: string;                // 彈出視窗的說明文字
       routes?: { to: { x: number; z: number }; alt?: boolean; label?: string }[];
-                                       // 從該 Pin 出發的建議移動路線（可多條）；alt 為次要路線，用不同顏色
+      // 從該 Pin 出發的建議移動路線（可多條）；alt 為次要路線，用不同顏色
     }[];
-                                       // 常駐標記（依序顯示 ①②③…）：不隨步驟切換清除，
-                                       // 用於「這個技巧有哪幾個固定地點」這種非流程式的頁面
+    // 常駐標記（依序顯示 ①②③…）：不隨步驟切換清除，
+    // 用於「這個技巧有哪幾個固定地點」這種非流程式的頁面
     pinImageFolder?: string;           // pins[].image 的所在資料夾（public/ 底下），例："botw-dynamic_ruinguardian"
   }; // 「參照流程地圖」容器：位於主體格線之下、注意事項之上（與 model3d 同層級，可並存）。
-     // 底圖放在 public/flow-map/{totk,botw}/*.webp；步驟端的資料放在各 method 的 mapFlow
+  // 底圖放在 public/flow-map/{totk,botw}/*.webp；步驟端的資料放在各 method 的 mapFlow
   methods?: TypeMethod[];     // A 區流程步驟（分頁）
   notes?: TypeNote[];         // 注意事項
   closing?: string;           // 注意事項下方的結語
@@ -207,7 +207,7 @@ export interface TypeApplications {
   title?: string;   // 視窗標題，預設同 label
   intro?: string;   // 視窗標題下方的說明句
   placement?: "principle" | "notes"; // 按鈕位置，預設 "principle"（原理說明下方）；
-                                      // "notes" 則改放注意事項區、緊接在 faqLink 旁邊
+  // "notes" 則改放注意事項區、緊接在 faqLink 旁邊
   groups: {
     title: string;
     intro?: string;
@@ -716,8 +716,8 @@ export const typeContent: Record<string, TypeContent> = {
   },
 
   "botw-03": {
-    videoFolder:    "botw-lynel",
-    methodsTitle:   "攻擊模式",
+    videoFolder: "botw-lynel",
+    methodsTitle: "攻擊模式",
     principleTitle: "對應策略",
     principleItems: [
       "曠野人馬的動作模式很固定，按住 ZL 鎖定人馬並保持冷靜隨時觀察人馬動向",
@@ -732,8 +732,8 @@ export const typeContent: Record<string, TypeContent> = {
     ],
     methods: [
       {
-        tab:   "共通",
-        name:  "所有武器的人馬皆會使用的攻擊",
+        tab: "共通",
+        name: "所有武器的人馬皆會使用的攻擊",
         video: "共通.mp4",
         steps: [
           "__三階段進攻模式__：3 次近距離招式 或 2次掃斬 → 衝刺型招式 → 火球",
@@ -746,8 +746,8 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:   "持劍",
-        name:  "持劍人馬（單手劍＋盾）",
+        tab: "持劍",
+        name: "持劍人馬（單手劍＋盾）",
         video: "持劍.mp4",
         steps: [
           "__3 連斬__：近距離會使出連續揮出三刀",
@@ -756,8 +756,8 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:   "持槍",
-        name:  "持槍人馬（長槍）",
+        tab: "持槍",
+        name: "持槍人馬（長槍）",
         video: "持槍.mp4",
         steps: [
           "__跳刺__：高躍起後向下突刺，落地產生__衝擊波__範圍傷害",
@@ -765,8 +765,8 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:   "持雙手劍",
-        name:  "持雙手劍人馬（雙手大劍 / 獸神大劍）",
+        tab: "持雙手劍",
+        name: "持雙手劍人馬（雙手大劍 / 獸神大劍）",
         video: "持大劍.mp4",
         steps: [
           "__迴旋斬__：玩家待在側面或背面時極易觸發，可蹲在人馬下方迴避",
@@ -821,7 +821,7 @@ export const typeContent: Record<string, TypeContent> = {
     ],
     methods: [
       {
-        tab:  "月步",
+        tab: "月步",
         name: "月步（Moonjump）",
         video: "月步.mp4",
         steps: [
@@ -834,7 +834,7 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:  "地滑",
+        tab: "地滑",
         name: "地滑（Grounded Slide）",
         video: "地滑.mp4",
         sections: [
@@ -865,7 +865,7 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:  "定位月傳",
+        tab: "定位月傳",
         name: "定位月步傳送（Mww, Moonjump Wrong Warp）",
         video: "MWW.mp4",
         steps: [
@@ -941,7 +941,8 @@ export const typeContent: Record<string, TypeContent> = {
     videos: [
       {
         id: "siBcEvxr1Y0",
-        title: "番外58 - 遊戲中唯一不會壞的單手劍！獲得「過場必殺劍(Cutscene One-Hit Obliterator)」的詳細原理與步驟說明！", publishedAt: "2025-09-28" },
+        title: "番外58 - 遊戲中唯一不會壞的單手劍！獲得「過場必殺劍(Cutscene One-Hit Obliterator)」的詳細原理與步驟說明！", publishedAt: "2025-09-28"
+      },
     ],
   },
 
@@ -1688,38 +1689,49 @@ export const typeContent: Record<string, TypeContent> = {
       {
         id: "ewnlB6jK7M8",
         title: "番外04(新) - 原來不只有「完美迴避的突擊」？Yuda教你所有「進階突擊(Advanced Flurry Rush, TCR/PDR/ATR)」",
-        desc: "最完整的「主動式突擊（Active Flurry Rush）」教學！", publishedAt: "2020-06-24" },
+        desc: "最完整的「主動式突擊（Active Flurry Rush）」教學！", publishedAt: "2020-06-24"
+      },
       {
         id: "JsMFQVpUJcI",
-        title: "番外04(補) - 極限距離的超遠突擊！「無鎖定突擊」與「雙手武器的側跳PDR」（中文解說）", publishedAt: "2020-10-09" },
+        title: "番外04(補) - 極限距離的超遠突擊！「無鎖定突擊」與「雙手武器的側跳PDR」（中文解說）", publishedAt: "2020-10-09"
+      },
       {
         id: "pZWqxIHxweA",
         title: "番外45 - 當英傑學會飛雷神之術！「閃擊(Thunderclap Rush)」（非詳盡解說）",
-        desc: "最早的「閃擊（Thunderclap Rush）」教學！", publishedAt: "2020-02-16" },
+        desc: "最早的「閃擊（Thunderclap Rush）」教學！", publishedAt: "2020-02-16"
+      },
       {
         id: "voH5iBOR5kk",
-        title: "番外45.5(進階) - 騎完人馬後的飛雷神！「落馬閃擊(Jump-off Thunderclap Rush)」", publishedAt: "2021-07-14" },
+        title: "番外45.5(進階) - 騎完人馬後的飛雷神！「落馬閃擊(Jump-off Thunderclap Rush)」", publishedAt: "2021-07-14"
+      },
       {
         id: "gva5ZCkuRlE",
-        title: "指法15 -「跳馬盾擋」與「落馬閃擊」(Jump-off Shield Block & Thunderclap Rush, 簡易說明)", publishedAt: "2021-07-07" },
+        title: "指法15 -「跳馬盾擋」與「落馬閃擊」(Jump-off Shield Block & Thunderclap Rush, 簡易說明)", publishedAt: "2021-07-07"
+      },
       {
         id: "BZtJ2BzjkDw",
-        title: "番外28 -「快速突擊（Quick Rush）」（中文解說）", publishedAt: "2019-04-26" },
+        title: "番外28 -「快速突擊（Quick Rush）」（中文解說）", publishedAt: "2019-04-26"
+      },
       {
         id: "O8afIFdhb18",
-        title: "番外22 自燃火把／完美盾擋重置(DSBR)／烏魯波薩突擊(Urbosa Rush)（補充教學）", publishedAt: "2018-11-08" },
+        title: "番外22 自燃火把／完美盾擋重置(DSBR)／烏魯波薩突擊(Urbosa Rush)（補充教學）", publishedAt: "2018-11-08"
+      },
       {
         id: "7zs5Vt8Xoa4",
-        title: "指法10「二段式強制子彈時間（Shield Block Reset + Perfect Daruk Rush）」", publishedAt: "2018-10-13" },
+        title: "指法10「二段式強制子彈時間（Shield Block Reset + Perfect Daruk Rush）」", publishedAt: "2018-10-13"
+      },
       {
         id: "qxRxWDyohMI",
-        title: "指法01 強制子彈時間／完美達爾克爾突擊（PDR）", publishedAt: "2018-07-14" },
+        title: "指法01 強制子彈時間／完美達爾克爾突擊（PDR）", publishedAt: "2018-07-14"
+      },
       {
         id: "mK-hlDjgfjs",
-        title: "番外04 強制子彈時間(Daruk Rush / 強制ダルケルラッシュ)", publishedAt: "2018-05-11" },
+        title: "番外04 強制子彈時間(Daruk Rush / 強制ダルケルラッシュ)", publishedAt: "2018-05-11"
+      },
       {
         id: "WJhWim4S-KI",
-        title: "28 遊戲攻略技巧（五）- Advanced Techniques（中文解說）", publishedAt: "2018-05-08" },
+        title: "28 遊戲攻略技巧（五）- Advanced Techniques（中文解說）", publishedAt: "2018-05-08"
+      },
     ],
   },
 
@@ -2272,7 +2284,8 @@ export const typeContent: Record<string, TypeContent> = {
         id: "erkGAtF2QnY",
         title: "番外36.5 - 下了初始台地就能複製武器！「馬滑武器複製法(Horse Slide Duplication)」",
         desc: "加載速度較快的 Switch 2 Edition 版不適用。",
-        at: 1, publishedAt: "2021-02-12" },
+        at: 1, publishedAt: "2021-02-12"
+      },
     ],
   },
 
@@ -2303,7 +2316,8 @@ export const typeContent: Record<string, TypeContent> = {
         id: "95ZeIyckScw",
         title: "回應06(new) - 22個冷知識與小技巧（22 Trivia & Tips）",
         desc: "礦車上坡時會輕量化！調整重量適合天跳！",
-        at: 127, publishedAt: "2018-12-10" },
+        at: 127, publishedAt: "2018-12-10"
+      },
     ],
   },
 
@@ -2376,7 +2390,7 @@ export const typeContent: Record<string, TypeContent> = {
         text: "最早利用一些特殊方法（DLC 關卡）來重置判定，在炸彈神廟旁邊的守護者就能無限噴出素材，但在 Ver.1.3.1 版被修正。2019/4/30 由 【おとを布】 玩家在 X 上分享。地圖上的廢棄守護者幾乎都是靜態物件，遊戲啟動時就會被讀取，惟有 4 隻動態守護者（可查找 FldObj_RuinGuardian*Dynamic Static:0），會因為林克的位置而動態載入或卸載。",
       },
       {
-        text: "推守護者不是觸發點；觸發點是林克離開守護者原生地圖單元格 2 格外。推動守護者的目的，是讓林克跨過卸載邊界時，守護者本體仍在約 210m 的顯示／載入範圍內，不會因距離過遠而消失。",
+        text: "推守護者不是重點，重點是林克離開守護者原生地圖單元格 2 格外。推動守護者的目的，是讓林克跨過卸載邊界時，守護者本體仍在約 210m 的顯示／載入範圍內，不會因距離過遠而消失。",
       },
       {
         title: "為何這 4 個廢棄守護者會一直噴材料？",
@@ -2396,6 +2410,7 @@ export const typeContent: Record<string, TypeContent> = {
     ],
     notes: [
       { text: "由於 Nintendo Switch 1 的效能，在無限複製完後必須用一些特殊方式降低負載或自動存檔來保存已經獲得過材料的紀錄。" },
+      { text: "已經掉過素材的動態廢棄守護者還是能夠觸發無限噴發的效果，原因在「原理說明」。" },
       {
         text: "依蓋隊僅出現以下時段，若想避免遇見他們，可以避開這些時間段推，他們一出現很常把守護者異常撞飛到很遠：",
         sub: ["13:00-17:00", "19:00-21:00", "00:00-04:00"],
@@ -2566,8 +2581,8 @@ export const typeContent: Record<string, TypeContent> = {
   },
 
   "totk-03": {
-    videoFolder:    "totk-lynel",
-    methodsTitle:   "攻擊模式",
+    videoFolder: "totk-lynel",
+    methodsTitle: "攻擊模式",
     principleTitle: "對應策略",
     principleItems: [
       "王淚人馬的動作相對不完全固定，會依林克的站位、視角，有不同的攻擊次數，按住 ZL 鎖定人馬並保持冷靜隨時觀察人馬動向",
@@ -2581,8 +2596,8 @@ export const typeContent: Record<string, TypeContent> = {
     ],
     methods: [
       {
-        tab:   "共通",
-        name:  "所有武器的人馬皆會使用的攻擊",
+        tab: "共通",
+        name: "所有武器的人馬皆會使用的攻擊",
         video: "人馬_共通.mp4",
         steps: [
           "__掃角__：一般近距離模式的攻擊完常常會以這個招式收尾，盾擋會後撤",
@@ -2595,8 +2610,8 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:   "持劍",
-        name:  "持劍人馬（單手劍＋盾）",
+        tab: "持劍",
+        name: "持劍人馬（單手劍＋盾）",
         video: "人馬_持劍.mp4",
         steps: [
           "__3 連斬__：近距離會使出連續揮出三刀",
@@ -2605,8 +2620,8 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:   "持槍",
-        name:  "持槍人馬（長槍）",
+        tab: "持槍",
+        name: "持槍人馬（長槍）",
         video: "人馬_持槍.mp4",
         steps: [
           "__跳刺__：高躍起後向下突刺，落地產生__衝擊波__範圍傷害",
@@ -2614,8 +2629,8 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:   "持雙手劍",
-        name:  "持雙手劍人馬（雙手大劍 / 獸神大劍）",
+        tab: "持雙手劍",
+        name: "持雙手劍人馬（雙手大劍 / 獸神大劍）",
         video: "人馬_持雙手劍.mp4",
         steps: [
           "__迴旋斬__：玩家待在側面或背面時極易觸發，可蹲在人馬下方迴避",
@@ -2625,9 +2640,9 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:   "無傷打法",
-        name:  "可無傷打法的藍圖（No-Damage Autobuild）",
-        tags:  ["任意攻擊模式"],
+        tab: "無傷打法",
+        name: "可無傷打法的藍圖（No-Damage Autobuild）",
+        tags: ["任意攻擊模式"],
         video: "人馬_無傷打法.mp4",
         steps: [
           {
@@ -3658,7 +3673,8 @@ export const typeContent: Record<string, TypeContent> = {
     videos: [
       {
         id: "aELlly95zCk",
-        title: "番外20 - 全屬性大師劍！並列多把裝備在手上的「再同步並列(Swap Resync Zuggle)」步驟與原理解說", publishedAt: "2026-02-06" },
+        title: "番外20 - 全屬性大師劍！並列多把裝備在手上的「再同步並列(Swap Resync Zuggle)」步驟與原理解說", publishedAt: "2026-02-06"
+      },
       { id: "zaSkPSgXmn8", title: "不廢話24 -「米涅魯地圖並列（Mineru Map Zuggle）」(適用：全版本)", publishedAt: "2026-05-20" },
       { id: "_XG5lYJzSpk", title: "不廢話18 -「黏足（Drop Smuggle）」與「足下並列（Drop Zuggle）」(適用：1.2.X)", publishedAt: "2024-08-29" },
       { id: "95RPAqAllJo", title: "不廢話21 -「沐彼並列／繼承／掉落／幽體繼承（Advanced Moobe glitches）」(適用：Ver.1.2.0～)", publishedAt: "2024-08-25" },
@@ -4005,15 +4021,18 @@ export const typeContent: Record<string, TypeContent> = {
       {
         id: "MWBVJsLTA0c",
         title: "番外21 - 無限耐久＆複製＆無限彈簧火箭盾！虛空次元歸來的「虛化裝備(Void Dip & DI)」原理解說與常用步驟示範（適用ver.1.2.1～）",
-        desc: "代替 Invizuggle 的「可調式過載」！", publishedAt: "2026-02-26" },
+        desc: "代替 Invizuggle 的「可調式過載」！", publishedAt: "2026-02-26"
+      },
       {
         id: "UIHuP5k0myM",
         title: "番外17 - 無限的代名詞！「過載(Overload)」全應用！（無限複製｜無限火箭｜無限跳躍）",
-        desc: "過載後想怎麼用就怎麼用，不用電池！", publishedAt: "2024-09-15" },
+        desc: "過載後想怎麼用就怎麼用，不用電池！", publishedAt: "2024-09-15"
+      },
       {
         id: "sqmtbNgdY1w",
         title: "番外24 - 偷走NPC手上的武器！「全域餘料過載(SFO)」拿走「薩爾達火把」和「米涅魯手臂」吧！（適用ver.1.2.0+｜Nintendo Switch 2）",
-        desc: "偷走 NPC 手上裝備的方法！", publishedAt: "2026-06-26" },
+        desc: "偷走 NPC 手上裝備的方法！", publishedAt: "2026-06-26"
+      },
     ],
   },
 
@@ -4051,7 +4070,8 @@ export const typeContent: Record<string, TypeContent> = {
       {
         id: "QWevjL_rbE8",
         title: "番外08(舊) - 300小時還不知道的12種玩法（~ver.1.2.1, Still Don't Know Until 300 Hours Play-Time）",
-        at: 252, publishedAt: "2024-01-14" },
+        at: 252, publishedAt: "2024-01-14"
+      },
     ],
   },
 
@@ -4650,7 +4670,8 @@ export const typeContent: Record<string, TypeContent> = {
         id: "MWBVJsLTA0c",
         title: "番外21 - 無限耐久＆複製＆無限彈簧火箭盾！虛空次元歸來的「虛化裝備(Void Dip & DI)」原理解說與常用步驟示範（適用ver.1.2.1～）",
         desc: "用途非常廣、不消耗耐久的裝備狀態",
-        at: 1233, publishedAt: "2026-02-26" },
+        at: 1233, publishedAt: "2026-02-26"
+      },
     ],
   },
 
@@ -5156,12 +5177,14 @@ export const typeContent: Record<string, TypeContent> = {
         id: "zFLuHyITm00",
         title: "番外01 - 實用技巧攻略(一)｜王國之淚也通用的曠野之息技巧解說！",
         desc: "基本上沒寫某版本以下的基本上新版也能用。",
-        at: 969, publishedAt: "2023-06-04" },
+        at: 969, publishedAt: "2023-06-04"
+      },
       {
         id: "Y3AUNIheO84",
         title: "番外05 - 實用技巧攻略(三)｜王淚戰鬥系統的精髓",
         desc: "基本上沒寫某版本以下的基本上新版也能用。",
-        at: 617, publishedAt: "2023-07-16" },
+        at: 617, publishedAt: "2023-07-16"
+      },
     ],
   },
 
@@ -6034,7 +6057,7 @@ export const typeContent: Record<string, TypeContent> = {
   },
 
   "aoc-02": {
-    methodsTitle:   "技巧一覽",
+    methodsTitle: "技巧一覽",
     principleTitle: "傷害機制",
     principleSections: [
       {
@@ -6072,7 +6095,7 @@ export const typeContent: Record<string, TypeContent> = {
     ],
     methods: [
       {
-        tab:  "破防流",
+        tab: "破防流",
         name: "打出弱點槽（WPG Breaking）",
         intro: "以下是幾種高效觸發弱點槽的方法：",
         steps: [
@@ -6086,7 +6109,7 @@ export const typeContent: Record<string, TypeContent> = {
         note: "破防後的猛擊才是主要傷害來源，因此「一場戰鬥能破幾次防」比「單刀傷害多高」更決定輸出總量。",
       },
       {
-        tab:  "硬直取消",
+        tab: "硬直取消",
         name: "多重硬直取消（Endlag Cancel）與 ZRB 亂舞",
         steps: [
           "__ZL 重置／防禦取消（Guard Cancel）__：攻擊中按住 ZL 約一秒會重置攻擊，主要用於取消強攻擊（特別是 C1）的後硬直",
@@ -6106,7 +6129,7 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:  "進階操作",
+        tab: "進階操作",
         name: "通用的操作技巧",
         steps: [
           "__最速盾反靜止（Fast Parry Stasis）__：盾反成功後可立刻接上靜止器",
@@ -6128,7 +6151,7 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:  "角色專屬",
+        tab: "角色專屬",
         name: "各角色的特化戰法",
         steps: [
           "__單手劍林克 － 無限踩盾滑行__：在坡度陡峭的下坡使用 C3 踩盾跳，接著持續按著 X，即可觸發連續踩盾滑行",
@@ -6141,7 +6164,7 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:  "法杖應用",
+        tab: "法杖應用",
         name: "法杖與場地屬性",
         steps: [
           "__雷杖＋磁力吸取器（Magnesis Thunderstorm）__：先用磁力吸取器吸起金屬物體，再用雷杖攻擊被吸起的金屬物體，可一口氣電擊所有被吸過來的怪物；若是小 Boss 還能直接打出碎裂的弱點槽",
@@ -6173,7 +6196,7 @@ export const typeContent: Record<string, TypeContent> = {
   },
 
   "aoi-01": {
-    methodsTitle:   "戰鬥技巧",
+    methodsTitle: "戰鬥技巧",
     principleTitle: "高難度機制",
     principleSections: [
       {
@@ -6214,7 +6237,7 @@ export const typeContent: Record<string, TypeContent> = {
     ],
     methods: [
       {
-        tab:  "C技與連招",
+        tab: "C技與連招",
         name: "傳統 C 技系統的回歸",
         steps: [
           "攻擊模式以__普攻（Y）__搭配__強攻擊（X）__的 C 技為主",
@@ -6231,7 +6254,7 @@ export const typeContent: Record<string, TypeContent> = {
         note: "這版的 C 技平衡做得不錯，無雙老玩家會很熟悉，新玩家也能快速上手。",
       },
       {
-        tab:  "隊友切換",
+        tab: "隊友切換",
         name: "無敵與仇恨轉移",
         steps: [
           {
@@ -6253,7 +6276,7 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab:  "破防與輸出",
+        tab: "破防與輸出",
         name: "電池換硬直與必殺技追擊",
         steps: [
           {
@@ -6275,7 +6298,7 @@ export const typeContent: Record<string, TypeContent> = {
         note: "本作幾乎不需要升級武器 —— 只要電池夠，左納烏科技就能撐起大部分輸出。",
       },
       {
-        tab:  "左納烏連段",
+        tab: "左納烏連段",
         name: "屬性科技的組合技",
         steps: [
           "__屬性龍捲風__：丟出一個對應屬性的龍頭（火／冰／雷），再丟__兩個風扇__，即可觸發大範圍屬性龍捲。一個龍頭的持續時間可以丟兩個風扇",
@@ -6292,7 +6315,7 @@ export const typeContent: Record<string, TypeContent> = {
         note: "※ 脈衝雷射的原理與《王國之淚》讓魔像頭重複判定目標的做法相同。",
       },
       {
-        tab:  "角色特化",
+        tab: "角色特化",
         name: "值得優先練的幾個角色",
         steps: [
           {
