@@ -223,9 +223,9 @@ const commandGroups = [
           </h1>
           <p>
             {lang === "ja" ? (
-              <>ボタン操作ではなく、ゲームの流れをスクリプトとして書く。アイテム取得、装備、セーブ／ロードなどのコマンドを入力すると、シミュレーターが1行ずつインベントリの状態を計算してくれる。</>
+              <>IST の流れと結果をスクリプトで再現する。アイテム取得、装備、セーブ／ロードなどのコマンドを入力すると、シミュレーターが1行ずつインベントリの状態を計算してくれる。</>
             ) : (
-              <>它不是靠按鈕操作，而是把遊戲流程寫成腳本。輸入取得物品、裝備、存讀檔等指令，
+              <>以腳本的方式呈現轉存格的流程和結果。輸入取得物品、裝備、存讀檔等指令，
               模擬器就會逐行算出背包狀態。</>
             )}
           </p>
@@ -270,7 +270,7 @@ const commandGroups = [
       <div class="ist-wrap">
         <div class="ist-heading">
           <span>01 · START HERE</span>
-          <h2>{lang === "ja" ? "まず「どう動くか」を知ろう。" : "先知道它怎麼「跑」。"}</h2>
+          <h2>{lang === "ja" ? "まず「どう動くか」を知ろう" : "同步模擬"}</h2>
           <p>{lang === "ja" ? "実行ボタンはない。スクリプトを変更すると自動で再シミュレートされ、カーソルが置かれている行の実行後の状態が右側に表示される。" : "沒有執行按鈕。腳本變更後會自動重新模擬，游標停在哪一行，右側就顯示該行執行後的狀態。"}</p>
         </div>
 
@@ -323,7 +323,7 @@ const commandGroups = [
         <div class="ist-heading ist-heading-row">
           <div>
             <span>02 · SCRIPT WORKBENCH</span>
-            <h2>{lang === "ja" ? "動くスクリプトから始めよう。" : "從一段能跑的腳本開始。"}</h2>
+            <h2>{lang === "ja" ? "動くスクリプトから始めよう" : "範例腳本"}</h2>
           </div>
           <p>{lang === "ja" ? "シーンを切り替えたら、その内容を丸ごとコピーして IST 左側のエディタに貼り付ける。右側の文章はそのスクリプトで確認すべきポイント。" : "切換情境後，複製整段貼進 IST 左側編輯器。右邊的文字是這組腳本預期要觀察的重點。"}</p>
         </div>
@@ -429,7 +429,7 @@ const commandGroups = [
         <div class="ist-heading ist-heading-row">
           <div>
             <span>03 · COMMAND RECIPES</span>
-            <h2>{lang === "ja" ? "よく使う6つのコマンド。" : "六條最常用的指令。"}</h2>
+            <h2>{lang === "ja" ? "よく使う6つのコマンド" : "六條最常用的指令"}</h2>
           </div>
           <p>{lang === "ja" ? "各行はそのままコピーできる。ITEM_LIST には数量、アイテム名、カテゴリ、属性条件を続けられる。" : "每列都可以直接複製。ITEM_LIST 可以接數量、物品名稱、類別與屬性條件。"}</p>
         </div>
@@ -465,7 +465,7 @@ const commandGroups = [
       <div class="ist-wrap ist-syntax-layout">
         <div class="ist-heading">
           <span>04 · ITEM SYNTAX</span>
-          <h2>{lang === "ja" ? "アイテムはパラメータ表ではなく、一つの短い文。" : "物品不是參數表，是一句短句。"}</h2>
+          <h2>{lang === "ja" ? "アイテムの設定" : "道具的設置"}</h2>
           <p>
             {lang === "ja" ? (
               <>基本形式は <code>コマンド 数量 アイテム名 [属性=値]</code>。アイテム名は英語表記で、
@@ -509,7 +509,7 @@ const commandGroups = [
       <div class="ist-wrap">
         <div class="ist-heading">
           <span>05 · COMMAND INDEX</span>
-          <h2>{lang === "ja" ? "よく使うコマンド早見表。" : "常用指令速查。"}</h2>
+          <h2>{lang === "ja" ? "よく使うコマンド早見表" : "常用指令速查"}</h2>
           <p>{lang === "ja" ? "ここでは日常のシミュレーションで使う中核コマンドのみ収録している。高度なシステム操作は公式のコマンドリファレンスを参照すること。" : "這裡先收錄日常模擬會用到的核心指令；進階系統操作請以官方指令參考為準。"}</p>
         </div>
 
@@ -554,7 +554,7 @@ const commandGroups = [
       <div class="ist-wrap ist-notes-layout">
         <div class="ist-heading">
           <span>06 · FIELD NOTES</span>
-          <h2>{lang === "ja" ? "つまずきやすいポイント。" : "最容易卡住的地方。"}</h2>
+          <h2>{lang === "ja" ? "つまずきやすいポイント" : "常見問題"}</h2>
         </div>
         <ul>
           {lang === "ja" ? (
@@ -581,7 +581,7 @@ const commandGroups = [
     <section class="ist-final">
       <div class="ist-wrap">
         <span>READY / 01</span>
-        <h2>{lang === "ja" ? "まずスクリプトを貼り付けて、結果を見ながら直そう。" : "先貼一段腳本，再從結果修改。"}</h2>
+        <h2>{lang === "ja" ? "まずスクリプトを貼り付けて、結果を見ながら直そう" : "開始模擬"}</h2>
         <p>{lang === "ja" ? "すべてのコマンドを一度に覚える必要はない。アイテム作成、装備、セーブ、ロードさえできれば、ほとんどの IST の流れをテストし始められる。" : "不必一次背完所有指令。能建立物品、裝備、存檔與讀檔，就足以開始測試大多數 IST 流程。"}</p>
         <div>
           <a class="ist-primary-action" href={IST_URL} target="_blank" rel="noopener">

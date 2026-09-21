@@ -417,15 +417,15 @@ const ja: Record<keyof typeof zh, string> = {
   flowMapSteps:
     "手順の前にある丸ボタンをクリック：その手順の地点と移動ルートをマップに表示（もう一度で解除）",
 
-  faqTitle: "インベントリ転送 よくある質問 Q&A",
-  faqDescription: "インベントリ転送（IST・DIC・WMC・PE）に関する37件のよくある質問と Yuda の回答。メンバー質問箱より。",
+  faqTitle: "引き継ぎ枠 よくある質問 Q&A",
+  faqDescription: "引き継ぎ枠（IST・DIC・WMC・PE）に関する37件のよくある質問と Yuda の回答。メンバー質問箱より。",
   zuggleTitle: "Zuggle 詳細解説",
   zuggleDescription: "Zuggle 系テクニックの仕組み・派生・実践的な応用の詳細解説。",
 
   breadcrumbLabel: "パンくずリスト",
   subpageBackToResources: "資料一覧に戻る",
-  istTitle: "インベントリ転送（IST）シミュレーター",
-  istDescription: "インベントリ転送（IST）シミュレーターの使い方ガイド：スクリプトの入力方法、よく使うコマンド、アイテム記法、コピーして使えるサンプル。",
+  istTitle: "引き継ぎ枠（IST）シミュレーター",
+  istDescription: "引き継ぎ枠（IST）シミュレーターの使い方ガイド：スクリプトの入力方法、よく使うコマンド、アイテム記法、コピーして使えるサンプル。",
   schematicsTitle: "ブループリント共有",
   schematicsDescription: "『ゼルダの伝説 ティアーズ オブ ザ キングダム』のブループリント QR コード集。実用・おもしろの分類で整理。",
   schematicsBackToTotk: "ティアキンの資料に戻る",
@@ -525,7 +525,7 @@ const ja: Record<keyof typeof zh, string> = {
   videosHeading: "動画を探す",
   videosIntro:
     "キーワードで解説ページと関連動画を検索できます。スペース区切りで複数指定すると絞り込みが重なります（例：「不意打ち ブレワイ」）。",
-  videosSearchPlaceholder: "解説や動画を検索（例：「インベントリ転送」「不意打ち ブレワイ」）…",
+  videosSearchPlaceholder: "解説や動画を検索（例：「引き継ぎ枠」「不意打ち ブレワイ」）…",
   videosFilterAll: "すべて",
   videosEmptyTitle: "該当する内容が見つかりません",
   videosEmptyHint: "キーワードを変えるか、絞り込みを解除してみてください。",

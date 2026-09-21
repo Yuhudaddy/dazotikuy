@@ -82,7 +82,7 @@ const mapTools = [
     no: "02",
     title: "Filter",
     text: "控制地名、神廟、塔、商店、克洛格與可見地圖區域，降低畫面上的資訊量。",
-    textJa: "地名、祠、塔、店、コログの実など表示する範囲を絞り込み、画面上の情報量を減らす。",
+    textJa: "地名、祠、塔、店、コログ、表示するマップ範囲などを絞り込み、画面上の情報量を減らす。",
   },
   {
     no: "03",
@@ -146,14 +146,14 @@ const mapTools = [
           <h1 id="guide-title">{t.objMapBotwTitle}</h1>
           <p>
             {lang === "ja"
-              ? "名前検索だけじゃない。フィールド、条件、そしてブール構文を使って、ハイラル全体を本当に欲しい答えまで絞り込む。"
-              : "不只搜尋名稱。用欄位、條件與布林語法，把海拉魯縮小成你真正需要的答案。"}
+              ? "素材や魔物だけでなく、すべての Actor、オブジェクトの判定範囲、座標まで探せる。"
+              : "不只材料和魔物，所有 Actor、物件判定範圍、座標都能找到。"}
           </p>
 
           <div class="obj-hero-meta">
             <span>Created by Léo Lam</span>
-            <span>{lang === "ja" ? "英語インターフェース" : "English interface"}</span>
-            <span>{lang === "ja" ? "詳細なオブジェクトデータ" : "Advanced object data"}</span>
+            <span>{"English interface"}</span>
+            <span>{"Advanced object data"}</span>
           </div>
 
           <div class="obj-hero-actions">
@@ -212,7 +212,7 @@ const mapTools = [
               </div>
               <div class="obj-step-example">
                 <code>FldObj_RuinGuardian*Dynamic static:0</code>
-                <span>{lang === "ja" ? "無限古代素材（Infinite Ancient Parts）を発生させられる、動的な壊れたガーディアン" : "能觸發無限古代素材的動態廢棄守護者"}</span>
+                <span>{lang === "ja" ? "無限古代素材（Infinite Ancient Parts）を発生させられる Dynamic のガーディアン（朽）" : "能觸發無限古代素材的動態廢棄守護者"}</span>
               </div>
             </div>
           </article>
@@ -261,7 +261,7 @@ const mapTools = [
             {lang === "ja" ? (
               <>右側をクリックして検索の構文を体験してみよう。スペースは <code>AND</code> と同じ意味で、<code>NOT</code> は条件に合う結果を除外する。</>
             ) : (
-              <>點擊右邊試著了解搜尋的語法。空格代表 <code>AND</code>,
+              <>點擊右邊試著了解搜尋的語法。空格代表 <code>AND</code>，
               <code>NOT</code> 會排除符合的結果。</>
             )}
           </p>
@@ -338,7 +338,7 @@ const mapTools = [
       <div class="obj-wrap obj-filter-layout">
         <div class="obj-section-heading obj-filter-intro">
           <span>{lang === "ja" ? "COLUMN FILTERS · フィールド絞り込み" : "COLUMN FILTERS · 欄位篩選"}</span>
-          <h2>{lang === "ja" ? "結果を絞り込む" : "避免結果太籠統"}</h2>
+          <h2>{lang === "ja" ? "結果を絞り込む" : "進階搜尋"}</h2>
           <p>
             {lang === "ja" ? (
               <>フィールド構文は必ず <code>COLUMN:QUERY</code> の形を使う。複数のフィールドを同じ検索式に並べて、段階的に結果を絞り込める。</>
@@ -400,7 +400,7 @@ const mapTools = [
       <div class="obj-wrap">
         <div class="obj-section-heading">
           <span>{lang === "ja" ? "MAP WORKFLOW · マップツール" : "MAP WORKFLOW · 地圖工具"}</span>
-          <h2>{lang === "ja" ? "地図上での見え方" : "呈現於地圖"}</h2>
+          <h2>{lang === "ja" ? "地図上での見え方" : "顯示物件資訊"}</h2>
         </div>
 
         <div class="obj-tools-list">
