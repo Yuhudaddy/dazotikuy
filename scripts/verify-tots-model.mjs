@@ -6,8 +6,8 @@ import { fitModelBounds, formatBom, parseBomField, pickModelLabel, roomLabel, st
 
 const root = new URL("../public/tots-model/v2/", import.meta.url);
 const json = async name => JSON.parse(await readFile(new URL(name, root), "utf8"));
-const layout = await json("layout-20260921d.json");
-const manifest = await json("manifest-20260921d.json");
+const layout = await json("layout-20260923.json");
+const manifest = await json("manifest-20260923.json");
 const binary = await readFile(new URL(manifest.model, root));
 assert.equal(createHash("sha256").update(binary).digest("hex"), manifest.sha256);
 assert.equal(binary.length, manifest.bytes);

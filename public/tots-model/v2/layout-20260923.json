@@ -1,0 +1,844 @@
+{
+  "version": 2,
+  "revision": "2026-09-23 黑塔頸部凹縫・六向白線",
+  "resetBounds": {
+    "min": [
+      -50.5,
+      -4.8819,
+      -40.5
+    ],
+    "max": [
+      -20,
+      17,
+      16.34981715
+    ]
+  },
+  "overviewBounds": {
+    "min": [
+      -85,
+      -4.8819,
+      -45.5
+    ],
+    "max": [
+      55.5,
+      17,
+      45.5
+    ]
+  },
+  "rooms": [
+    {
+      "id": "beginner-1",
+      "stage": "beginner",
+      "floor": 1,
+      "center": [
+        -46.5,
+        3,
+        -38.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "beginner-2",
+      "stage": "beginner",
+      "floor": 2,
+      "center": [
+        -44,
+        3,
+        -38.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "beginner-3",
+      "stage": "beginner",
+      "floor": 3,
+      "center": [
+        -41.5,
+        3,
+        -38.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "beginner-4",
+      "stage": "beginner",
+      "floor": 4,
+      "center": [
+        -38.5,
+        3,
+        -38.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "beginner-5",
+      "stage": "beginner",
+      "floor": 5,
+      "center": [
+        -36,
+        3,
+        -38.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "beginner-6",
+      "stage": "beginner",
+      "floor": 6,
+      "center": [
+        -33.5,
+        3,
+        -38.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "beginner-7",
+      "stage": "beginner",
+      "floor": 7,
+      "center": [
+        -31,
+        3,
+        -37.5
+      ],
+      "width": 0.5,
+      "height": 0.2133333333333333,
+      "shape": "circle",
+      "floating": false
+    },
+    {
+      "id": "beginner-8",
+      "stage": "beginner",
+      "floor": 8,
+      "center": [
+        -36,
+        3,
+        -36
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "beginner-9",
+      "stage": "beginner",
+      "floor": 9,
+      "center": [
+        -33.5,
+        3,
+        -36
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "beginner-10",
+      "stage": "beginner",
+      "floor": 10,
+      "center": [
+        -38.5,
+        3,
+        -36
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "beginner-11",
+      "stage": "beginner",
+      "floor": 11,
+      "center": [
+        -45,
+        3,
+        -36
+      ],
+      "width": 2,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "beginner-12",
+      "stage": "beginner",
+      "floor": 12,
+      "center": [
+        -41.5,
+        3,
+        -36
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "middle-1",
+      "stage": "middle",
+      "floor": 1,
+      "center": [
+        -45,
+        3,
+        -33.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": true
+    },
+    {
+      "id": "middle-2",
+      "stage": "middle",
+      "floor": 2,
+      "center": [
+        -38,
+        3,
+        -33.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": true
+    },
+    {
+      "id": "middle-3",
+      "stage": "middle",
+      "floor": 3,
+      "center": [
+        -42,
+        3,
+        -33.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": true
+    },
+    {
+      "id": "middle-4",
+      "stage": "middle",
+      "floor": 4,
+      "center": [
+        -34,
+        3,
+        -33.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": true
+    },
+    {
+      "id": "middle-5",
+      "stage": "middle",
+      "floor": 5,
+      "center": [
+        -31,
+        3,
+        -32
+      ],
+      "width": 0.5,
+      "height": 0.5,
+      "shape": "circle",
+      "floating": false
+    },
+    {
+      "id": "middle-6",
+      "stage": "middle",
+      "floor": 6,
+      "center": [
+        -45,
+        3,
+        -29
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "middle-7",
+      "stage": "middle",
+      "floor": 7,
+      "center": [
+        -42,
+        3,
+        -29
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "middle-8",
+      "stage": "middle",
+      "floor": 8,
+      "center": [
+        -38.5,
+        3,
+        -29
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "middle-9",
+      "stage": "middle",
+      "floor": 9,
+      "center": [
+        -36,
+        3,
+        -29
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "middle-10",
+      "stage": "middle",
+      "floor": 10,
+      "center": [
+        -33.5,
+        3,
+        -29
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "middle-11",
+      "stage": "middle",
+      "floor": 11,
+      "center": [
+        -31,
+        3,
+        -27
+      ],
+      "width": 0.5,
+      "height": 0.2133333333333333,
+      "shape": "circle",
+      "floating": false
+    },
+    {
+      "id": "middle-12",
+      "stage": "middle",
+      "floor": 12,
+      "center": [
+        -33.5,
+        3,
+        -31
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": true
+    },
+    {
+      "id": "middle-13",
+      "stage": "middle",
+      "floor": 13,
+      "center": [
+        -36,
+        3,
+        -31
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": true
+    },
+    {
+      "id": "middle-14",
+      "stage": "middle",
+      "floor": 14,
+      "center": [
+        -38.5,
+        3,
+        -31
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": true
+    },
+    {
+      "id": "middle-15",
+      "stage": "middle",
+      "floor": 15,
+      "center": [
+        -42,
+        3,
+        -31
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": true
+    },
+    {
+      "id": "middle-16",
+      "stage": "middle",
+      "floor": 16,
+      "center": [
+        -45,
+        3,
+        -31
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": true
+    },
+    {
+      "id": "final-1",
+      "stage": "final",
+      "floor": 1,
+      "center": [
+        -33.5,
+        3,
+        -27
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-2",
+      "stage": "final",
+      "floor": 2,
+      "center": [
+        -36,
+        3,
+        -27
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-3",
+      "stage": "final",
+      "floor": 3,
+      "center": [
+        -38.5,
+        3,
+        -27
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-4",
+      "stage": "final",
+      "floor": 4,
+      "center": [
+        -42,
+        3,
+        -27
+      ],
+      "width": 1.5,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-5",
+      "stage": "final",
+      "floor": 5,
+      "center": [
+        -45,
+        3,
+        -27
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-6",
+      "stage": "final",
+      "floor": 6,
+      "center": [
+        -48,
+        3,
+        -25.5
+      ],
+      "width": 0.5,
+      "height": 0.2133333333333333,
+      "shape": "circle",
+      "floating": false
+    },
+    {
+      "id": "final-7",
+      "stage": "final",
+      "floor": 7,
+      "center": [
+        -45,
+        3,
+        -24.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-8",
+      "stage": "final",
+      "floor": 8,
+      "center": [
+        -42,
+        3,
+        -24.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-9",
+      "stage": "final",
+      "floor": 9,
+      "center": [
+        -38.5,
+        3,
+        -24.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-10",
+      "stage": "final",
+      "floor": 10,
+      "center": [
+        -36,
+        3,
+        -24.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-11",
+      "stage": "final",
+      "floor": 11,
+      "center": [
+        -33.5,
+        3,
+        -24.5
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-12",
+      "stage": "final",
+      "floor": 12,
+      "center": [
+        -31,
+        3,
+        -23
+      ],
+      "width": 0.5,
+      "height": 0.2133333333333333,
+      "shape": "circle",
+      "floating": false
+    },
+    {
+      "id": "final-13",
+      "stage": "final",
+      "floor": 13,
+      "center": [
+        -33.5,
+        3,
+        -22.25
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-14",
+      "stage": "final",
+      "floor": 14,
+      "center": [
+        -36,
+        3,
+        -22.25
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-15",
+      "stage": "final",
+      "floor": 15,
+      "center": [
+        -38.5,
+        3,
+        -22.25
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-16",
+      "stage": "final",
+      "floor": 16,
+      "center": [
+        -42,
+        3,
+        -22.25
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-17",
+      "stage": "final",
+      "floor": 17,
+      "center": [
+        -45,
+        3,
+        -22.25
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-18",
+      "stage": "final",
+      "floor": 18,
+      "center": [
+        -48,
+        3,
+        -20
+      ],
+      "width": 0.5,
+      "height": 0.2133333333333333,
+      "shape": "circle",
+      "floating": false
+    },
+    {
+      "id": "final-19",
+      "stage": "final",
+      "floor": 19,
+      "center": [
+        -45,
+        3,
+        -20
+      ],
+      "width": 1,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-20",
+      "stage": "final",
+      "floor": 20,
+      "center": [
+        -42,
+        3,
+        -20
+      ],
+      "width": 2,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-21",
+      "stage": "final",
+      "floor": 21,
+      "center": [
+        -37,
+        3,
+        -20
+      ],
+      "width": 1.5,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-22",
+      "stage": "final",
+      "floor": 22,
+      "center": [
+        -31,
+        3,
+        -20
+      ],
+      "width": 1.5,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    },
+    {
+      "id": "final-23",
+      "stage": "final",
+      "floor": 23,
+      "center": [
+        -34,
+        3,
+        -20
+      ],
+      "width": 1.5,
+      "height": 1,
+      "shape": "square",
+      "floating": false
+    }
+  ],
+  "landmarks": [
+    {
+      "label": {
+        "zh": "黑塔",
+        "ja": "黒い塔"
+      },
+      "center": [
+        -35.4513,
+        -4.8819,
+        4.7531
+      ],
+      "radius": 7.5,
+      "bottom": -4.931900000000001,
+      "top": 17.1
+    },
+    {
+      "label": {
+        "zh": "中級1F西北側綠洲",
+        "ja": "中位 1F 北西のオアシス"
+      },
+      "center": [
+        -48,
+        3,
+        -34.8
+      ],
+      "radius": 0.72,
+      "bottom": 2.15,
+      "top": 3.3
+    },
+    {
+      "label": {
+        "zh": "中級16F西側綠洲",
+        "ja": "中位 16F 西のオアシス"
+      },
+      "center": [
+        -48.1,
+        3,
+        -31
+      ],
+      "radius": 0.72,
+      "bottom": 2.15,
+      "top": 3.3
+    },
+    {
+      "label": {
+        "zh": "初級7F東側盆地1",
+        "ja": "序位 7F 東の盆地 1"
+      },
+      "center": [
+        -28.5,
+        2.5,
+        -36.9
+      ],
+      "radius": 0.25,
+      "bottom": 2.4,
+      "top": 3.1
+    },
+    {
+      "label": {
+        "zh": "初級7F東側盆地2",
+        "ja": "序位 7F 東の盆地 2"
+      },
+      "center": [
+        -26,
+        2.5,
+        -36.9
+      ],
+      "radius": 0.25,
+      "bottom": 2.4,
+      "top": 3.1
+    },
+    {
+      "label": {
+        "zh": "粉色花瓣海",
+        "ja": "ピンクの花びら"
+      },
+      "center": [
+        4.25,
+        -1.5,
+        -21.6
+      ],
+      "radius": 1.5,
+      "bottom": -1.55,
+      "top": -1.4
+    },
+    {
+      "label": {
+        "zh": "黃色草花叢",
+        "ja": "黄色い草花"
+      },
+      "center": [
+        -9.9,
+        -1.5,
+        19.9
+      ],
+      "radius": 2.5,
+      "bottom": -1.55,
+      "top": -1.4
+    }
+  ]
+}

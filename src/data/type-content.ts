@@ -1062,14 +1062,14 @@ export const typeContent: Record<string, TypeContent> = {
 
   "botw-08": {
     model3d: {
-      src: "/tots-model/v2/tots-20260921d.glb",
+      src: "/tots-model/v2/tots-20260923.glb",
       alt: "劍之考驗高原、各關卡樓層與黑塔盆地的 3D 地圖模型",
       // glTF=(BOM.x, BOM.y, BOM.z)*0.01。載入座標表後依容器比例精確取景。
       cameraOrbit: "0deg 0deg 135m",
       cameraTarget: "-35.25m 6.059m -12.075m",
-      poster: "/tots-model/v2/poster-20260921d.jpg",
+      poster: "/tots-model/v2/poster-20260923.jpg",
       posterAlt: "劍之考驗高原與黑塔盆地的北向上視圖",
-      layoutSrc: "/tots-model/v2/layout-20260921d.json",
+      layoutSrc: "/tots-model/v2/layout-20260923.json",
       legend: [
         { color: "#91a963", label: "高原／平原" },
         { color: "#324656", label: "黑暗遮罩" },
