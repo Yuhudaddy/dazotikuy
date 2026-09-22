@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
-import { fitModelBounds, formatBom, parseBomInput, pickModelLabel, roomLabel, stageLabels } from "../src/lib/model3d-layout.ts";
+import { fitModelBounds, formatBom, parseBomField, pickModelLabel, roomLabel, stageLabels } from "../src/lib/model3d-layout.ts";
 
 const root = new URL("../public/tots-model/v2/", import.meta.url);
 const json = async name => JSON.parse(await readFile(new URL(name, root), "utf8"));
@@ -43,13 +43,12 @@ assert.equal(pickModelLabel(layout, [-35.4513, 10, 4.7531], "ja"), "黒い塔");
 assert.equal(pickModelLabel(layout, [4.25, -1.5, -21.6], "zh"), "粉色花瓣海");
 assert.equal(pickModelLabel(layout, [-48, 2.3, -34.8], "ja"), "中位 1F 北西のオアシス");
 assert.equal(pickModelLabel(layout, [0, 0, 0], "zh"), null);
-// Typed coordinates: BOM in, glTF out (x, y, z) * 0.01; y may be omitted for ground snapping.
-assert.deepEqual(parseBomInput("-4200, 300, -2700"), { x: -42, y: 3, z: -27 });
-assert.deepEqual(parseBomInput("-4200\t300\t-2700"), { x: -42, y: 3, z: -27 });
-assert.deepEqual(parseBomInput(" (−3545.13 , −538.19 , 475.31) "), { x: -35.4513, y: -5.3819, z: 4.7531 });
-assert.deepEqual(parseBomInput("-4200 -2700"), { x: -42, y: null, z: -27 });
-assert.deepEqual(parseBomInput("-4200, , -2700"), { x: -42, y: null, z: -27 });
-for (const bad of ["", "abc", "1", "1 2 3 4", "-4200, x, -2700"]) assert.equal(parseBomInput(bad), null, JSON.stringify(bad));
+// Typed coordinates: BOM in, glTF out (x, y, z) * 0.01; a blank field is null, junk is undefined.
+assert.equal(parseBomField("-4200"), -42);
+assert.equal(parseBomField(" −538.19 "), -5.3819);
+assert.equal(parseBomField(""), null);
+assert.equal(parseBomField("   "), null);
+for (const bad of ["abc", "1 2", "-4200,", "３００"]) assert.equal(parseBomField(bad), undefined, JSON.stringify(bad));
 assert.equal(formatBom([-42, 3.916, -26.644]), "BOM (-4200, 392, -2664)");
 assert.equal(formatBom([0.004, -0.004, 0]), "BOM (0, 0, 0)");
 assert(layout.resetBounds.min[0] <= -50.5 && layout.resetBounds.min[2] <= -40.5);

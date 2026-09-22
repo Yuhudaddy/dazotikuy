@@ -97,17 +97,13 @@ export function pickModelLabel(layout: ModelLayout, point: ModelPoint, lang: "zh
 export const pointBounds = (center: ModelPoint) =>
   roomBounds({ center, width: 1, height: 1, shape: "square", floating: false });
 
-/** Parse "x, y, z" or "x, z" typed in BOM units (comma, space or tab separated, as pasted from
- * the sheet; full-width minus accepted) into glTF units. y omitted or blank comes back null. */
-export function parseBomInput(text: string): { x: number; y: number | null; z: number } | null {
-  const fields = text.replace(/[−–]/g, "-").replace(/[()（）]/g, " ").split(/[,，\t]/);
-  const parts = fields.length === 1 ? fields[0].trim().split(/\s+/) : fields.map(f => f.trim());
-  if (parts.length !== 3 && parts.length !== 2) return null;
-  const numbers = parts.map(p => p === "" ? null : Number(p));
-  if (numbers.some(n => n !== null && !Number.isFinite(n))) return null;
-  const [x, y, z] = parts.length === 2 ? [numbers[0], null, numbers[1]] : numbers;
-  if (x === null || z === null) return null;
-  return { x: bomToGltf(x), y: y === null ? null : bomToGltf(y), z: bomToGltf(z) };
+/** One typed BOM field → glTF units. Blank means "not given" (null); anything that is not a
+ * number is undefined. Full-width minus accepted. */
+export function parseBomField(text: string): number | null | undefined {
+  const value = text.replace(/[−–]/g, "-").trim();
+  if (value === "") return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? bomToGltf(n) : undefined;
 }
 
 export function formatBom(point: ModelPoint) {

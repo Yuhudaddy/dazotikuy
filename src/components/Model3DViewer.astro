@@ -70,7 +70,9 @@ const sizeStyle = aspectRatio
             <label for={`${floorsId}-select`}>{t.model3dSelectFloor}</label>
             <div class="model3d-floor-input">
               <select id={`${floorsId}-select`} name="floor" required></select>
-              <button type="submit">{t.model3dGoLabel}</button>
+              <button type="submit" class="model3d-go" aria-label={t.model3dGoLabel} title={t.model3dGoLabel}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </button>
             </div>
           </form>
           <button type="button" class="model3d-action" data-action="coords" aria-expanded="false" aria-controls={coordsId} disabled>
@@ -78,11 +80,15 @@ const sizeStyle = aspectRatio
             <span>{t.model3dCoordsLabel}</span>
           </button>
           <form id={coordsId} class="model3d-panel" data-panel="coords" hidden>
-            <label for={`${coordsId}-input`}>{t.model3dCoordsField}</label>
-            <div class="model3d-floor-input">
-              <input id={`${coordsId}-input`} name="coords" type="text" inputmode="text" autocomplete="off"
-                spellcheck="false" enterkeyhint="go" placeholder={t.model3dCoordsPlaceholder} required />
-              <button type="submit">{t.model3dGoLabel}</button>
+            <span id={`${coordsId}-label`} class="model3d-panel-label">{t.model3dCoordsField}</span>
+            <div class="model3d-floor-input" role="group" aria-labelledby={`${coordsId}-label`}>
+              {["x", "y", "z"].map(axis => (
+                <input name={axis} type="text" inputmode="text" autocomplete="off" spellcheck="false"
+                  enterkeyhint="go" placeholder={axis} aria-label={axis} required={axis !== "y"} />
+              ))}
+              <button type="submit" class="model3d-go" aria-label={t.model3dGoLabel} title={t.model3dGoLabel}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </button>
             </div>
           </form>
         </>}
@@ -129,7 +135,7 @@ const sizeStyle = aspectRatio
   }
   .model3d-menu-toggle:hover, .model3d-menu-toggle[aria-expanded="true"] { border-color: var(--brand); color: var(--brand); }
   .model3d-menu {
-    position: absolute; right: 0; top: 52px; width: 258px; max-width: calc(100vw - 72px);
+    position: absolute; right: 0; top: 52px; width: 224px; max-width: calc(100vw - 72px);
     max-height: min(420px, 65vh); overflow-y: auto; overscroll-behavior: contain; padding: 6px;
     border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface);
     box-shadow: 0 8px 28px #00000024; color: var(--ink);
@@ -144,17 +150,25 @@ const sizeStyle = aspectRatio
   .model3d-action small { display: block; margin-top: 3px; font-size: 11px; color: var(--muted); }
   .model3d-action .model3d-check { margin-left: auto; visibility: hidden; width: 16px; }
   .model3d-action[aria-pressed="true"] .model3d-check { visibility: visible; }
-  .model3d-wrap :is(button, select):focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
-  .model3d-panel { margin: 2px 6px 8px; padding: 10px; border-radius: 4px; background: var(--bg); }
-  .model3d-panel label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-  .model3d-floor-input { display: flex; gap: 6px; }
-  .model3d-floor-input :is(select, input, button) { min-height: 44px; border: 1px solid var(--border-strong); border-radius: 4px; font-family: inherit; font-size: 13px; }
-  .model3d-floor-input :is(select, input) { flex: 1; min-width: 0; background: var(--surface); color: var(--ink); padding: 0 6px; }
+  .model3d-wrap :is(button, select, input):focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .model3d-panel { margin: 2px 6px 8px; padding: 8px; border-radius: 4px; background: var(--bg); }
+  .model3d-panel :is(label, .model3d-panel-label) { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .model3d-floor-input { display: flex; align-items: center; gap: 4px; }
+  .model3d-floor-input :is(select, input) {
+    flex: 1; min-width: 0; height: 40px; padding: 0 4px; border: 1px solid var(--border-strong); border-radius: 4px;
+    background: var(--surface); color: var(--ink); font-family: inherit; font-size: 12px;
+  }
+  .model3d-floor-input input { text-align: center; }
+  .model3d-floor-input input::placeholder { color: var(--muted); }
+  .model3d-go {
+    display: flex; align-items: center; justify-content: center; flex: none; width: 36px; height: 36px; padding: 0;
+    border: 0; border-radius: 50%; background: var(--ink); color: var(--bg); cursor: pointer;
+  }
+  .model3d-go svg { width: 18px; height: 18px; }
   .model3d-pin {
     width: 12px; height: 12px; border-radius: 50%; background: var(--ink); border: 2px solid var(--surface);
     box-shadow: 0 0 0 1px var(--border-strong), 0 2px 6px #0006; pointer-events: none;
   }
-  .model3d-floor-input button { padding: 0 10px; background: var(--ink); color: var(--bg); cursor: pointer; }
   .model3d-pick-info { margin-top: 8px; font-size: 13px; color: var(--muted); line-height: 1.6; }
   .model3d-pick-info.is-picked { color: var(--ink); }
   .model3d-loading { position: absolute; left: 12px; bottom: 12px; padding: 6px 10px; border-radius: 4px; background: var(--surface); color: var(--muted); font-size: 12px; pointer-events: none; }

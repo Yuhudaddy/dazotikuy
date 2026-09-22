@@ -1,4 +1,4 @@
-import { fitModelBounds, formatBom, parseBomInput, pickModelLabel, pointBounds, roomBounds, roomLabel,
+import { fitModelBounds, formatBom, parseBomField, pickModelLabel, pointBounds, roomBounds, roomLabel,
   stageLabels, type ModelLayout, type ModelBounds, type ModelPoint } from "../lib/model3d-layout";
 
 // The self-hosted web component exposes its scene graph after the load event.
@@ -10,7 +10,7 @@ document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
   const form = wrap.querySelector<HTMLFormElement>('[data-panel="floors"]');
   const select = form?.querySelector<HTMLSelectElement>("select");
   const coordsForm = wrap.querySelector<HTMLFormElement>('[data-panel="coords"]');
-  const coordsInput = coordsForm?.querySelector<HTMLInputElement>("input");
+  const coordsFields = [...coordsForm?.querySelectorAll<HTMLInputElement>("input") ?? []];
   const pin = wrap.querySelector<HTMLElement>(".model3d-pin")!;
   const info = wrap.querySelector<HTMLElement>(".model3d-pick-info")!;
   const loading = wrap.querySelector<HTMLElement>(".model3d-loading")!;
@@ -147,19 +147,31 @@ document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
     mv.jumpCameraToGoal();
     return null;
   };
-  coordsInput?.addEventListener("input", () => coordsInput.setCustomValidity(""));
+  for (const field of coordsFields) {
+    field.addEventListener("input", () => field.setCustomValidity(""));
+    // A row copied from the sheet ("x⇥y⇥z") pasted into any field fills all three.
+    field.addEventListener("paste", (event) => {
+      const parts = event.clipboardData?.getData("text").trim().split(/[,，\t\s()（）]+/).filter(Boolean) ?? [];
+      if (parts.length < 2 || parts.length > 3) return;
+      event.preventDefault();
+      const [x, y, z] = parts.length === 2 ? [parts[0], "", parts[1]] : parts;
+      coordsFields.forEach((f, i) => { f.value = [x, y, z][i]; f.setCustomValidity(""); });
+    });
+  }
   coordsForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const parsed = parseBomInput(coordsInput!.value);
-    if (!parsed) {
-      coordsInput!.setCustomValidity(ui.coordsInvalid);
-      coordsInput!.reportValidity();
+    const values = coordsFields.map(f => parseBomField(f.value));
+    const junk = values.indexOf(undefined);
+    if (junk !== -1) {
+      coordsFields[junk].setCustomValidity(ui.coordsInvalid);
+      coordsFields[junk].reportValidity();
       return;
     }
+    const [x, y, z] = values as [number, number | null, number]; // x and z are required fields
     setMenu(false, true);
-    const y = parsed.y ?? await surfaceHeight(parsed.x, parsed.z);
-    if (y === null) setInfo(ui.coordsNoSurface);
-    else void setView([parsed.x, y, parsed.z]);
+    const height = y ?? await surfaceHeight(x, z);
+    if (height === null) setInfo(ui.coordsNoSurface);
+    else void setView([x, height, z]);
   });
   mv.addEventListener("camera-change", (event: any) => {
     if (event.detail.source === "user-interaction") { activeView = null; ++cameraRequest; }
