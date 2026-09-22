@@ -34,6 +34,27 @@ const htmlLang = lang === "ja" ? "ja" : "zh-Hant-TW";
 // Astro.site 是 astro.config.mjs 的 site 欄位，Astro.url.pathname 已含 base。
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
 const ogImageUrl = new URL(href("/og-image.jpg"), Astro.site).href;
+
+// hreflang：中日文是兩套獨立網址（日文多一層 /ja 前綴），要明講「這兩個是同一頁的
+// 不同語言版本」，否則 Google 只能靠內容猜，日本讀者常被導到中文版，一進來就跳出。
+// 它不會讓排名變好，是在同一個名次上換成對的語言版本顯示，並把兩版的信號併成一組。
+//
+// 用 altPath 當開關：它只有在兩種語言都真的存在時才會傳進來（同一個值，中日文頁都傳），
+// 所以不會指到 404——配錯對象比不配更糟。入口頁沒有日文版，也沒有走這個 layout。
+// 必須雙向互指且包含自己，只有單邊宣告 Google 會整組忽略，故兩版都輸出完整清單。
+// 網址結尾補斜線：canonical 與 sitemap 都是這個形式，hreflang 指向非正規網址
+// 會在 Search Console 被判定成「沒有回指」。
+const altUrl = (target: Lang) =>
+  new URL(href(altPath!, target).replace(/\/?$/, "/"), Astro.site).href;
+// 繁中用 zh-Hant（依書寫系統）而不是 zh-TW（依地區）：香港、澳門的讀者也該拿到這一版。
+// x-default 是「其他語言的人看哪一個」，指向本站預設語言的中文版。
+const alternates = altPath
+  ? [
+      { hreflang: "zh-Hant", url: altUrl("zh") },
+      { hreflang: "ja", url: altUrl("ja") },
+      { hreflang: "x-default", url: altUrl("zh") },
+    ]
+  : [];
 ---
 
 <!doctype html>
@@ -56,6 +77,9 @@ const ogImageUrl = new URL(href("/og-image.jpg"), Astro.site).href;
     <title>{fullTitle}</title>
     <meta name="description" content={resolvedDescription} />
     <link rel="canonical" href={canonicalUrl} />
+    {alternates.map(({ hreflang, url }) => (
+      <link rel="alternate" hreflang={hreflang} href={url} />
+    ))}
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={resolvedDescription} />
     <meta property="og:type" content="website" />
