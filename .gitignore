@@ -52,6 +52,18 @@ blender-tots/_backup_phase3/
 blender-tots/render_*.png
 *.blend1
 
+# 本機備份（舊版 v1 劍之考驗網頁模型等）：只留硬碟，不進版控
+backup/
+
+# 劍之考驗 v2 重建工作區：Blender 自動備份與彩現預覽（共 330 MB+），不進版控；
+# 腳本、校準 JSON、README 是 scripts/sync-tots-web.mjs 的來源，保留。
+blender-tots/rebuild-v2/backups/
+blender-tots/rebuild-v2/previews/
+
+# 重建時參考的遊戲截圖（229 MB）。放在 public/ 是歷史因素——沒有任何頁面引用，
+# 一旦 commit 就會整包被 astro build 複製進 dist/ 部署上線，故排除。
+public/tots-map/
+
 # Astro 遷移前的原型產物（設計原型、轉換指南、生成用的 AI prompt）：
 # 已被現在的 Astro 專案完全取代，src/ 底下沒有任何引用，公開 repo 沒必要留著。
 reference/

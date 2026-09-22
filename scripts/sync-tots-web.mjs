@@ -1,18 +1,19 @@
 /** Copy the reviewed, optimized Blender export and derive a small picking layout.
- * Usage: node scripts/sync-tots-web.mjs [rebuild directory]
+ * Usage: npm run tots:sync [-- rebuild directory]
  * Run only when accepting a new model revision; the site build uses committed assets.
  */
 import { readFile, writeFile, mkdir, copyFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
+import { bomToGltf, stageLabels } from "../src/lib/model3d-layout.ts";
 
 const source = resolve(process.argv[2] ?? "blender-tots/rebuild-v2");
 const target = resolve("public/tots-model/v2");
 const original = JSON.parse(await readFile(resolve(source, "layout-v2.json"), "utf8"));
 const sheet = JSON.parse(await readFile(resolve(source, "source-sheet.json"), "utf8"));
 const version = original.revision.split(" ")[0].replaceAll("-", "");
-const scale = values => values.map(n => Math.round(n * 1e6) / 1e8);
-const stage = { 初級: "beginner", 中級: "middle", 頂級: "final" };
+const scale = values => values.map(bomToGltf);
+const stage = Object.fromEntries(Object.entries(stageLabels.zh).map(([id, zh]) => [zh, id]));
 const terrain = original.terrain_estimates;
 const plateau = terrain.plateau_bounds_east_north;
 const sea = terrain.sea_bounds_east_north;

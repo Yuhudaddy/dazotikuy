@@ -1,5 +1,7 @@
 /** Web layout uses glTF coordinates: east +X, up +Y, south +Z. */
 export type ModelPoint = [number, number, number];
+/** glTF = BOM * 0.01, rounded to 6 BOM decimals (what the committed layout files carry). */
+export const bomToGltf = (n: number) => Math.round(n * 1e6) / 1e8;
 export type ModelBounds = { min: ModelPoint; max: ModelPoint };
 export type ModelRoom = {
   id: string;
@@ -66,7 +68,7 @@ export function fitModelBounds(bounds: ModelBounds, aspect: number, fieldOfView:
   };
 }
 
-export function roomBounds(room: ModelRoom): ModelBounds {
+export function roomBounds(room: Pick<ModelRoom, "center" | "width" | "height" | "shape" | "floating">): ModelBounds {
   // Include the water around rest rooms and the suspended room undersides.
   const radius = Math.max(room.width * (room.shape === "circle" ? 1.8 : 0.8), 0.65);
   const [x, y, z] = room.center;
@@ -89,4 +91,25 @@ export function pickModelLabel(layout: ModelLayout, point: ModelPoint, lang: "zh
   if (room) return roomLabel(room, lang);
   return layout.landmarks.find(l => (x - l.center[0]) ** 2 + (z - l.center[2]) ** 2 <= l.radius ** 2
     && y >= l.bottom && y <= l.top)?.label[lang] ?? null;
+}
+
+/** Frame a typed or picked point like a single 100-size room. */
+export const pointBounds = (center: ModelPoint) =>
+  roomBounds({ center, width: 1, height: 1, shape: "square", floating: false });
+
+/** Parse "x, y, z" or "x, z" typed in BOM units (comma, space or tab separated, as pasted from
+ * the sheet; full-width minus accepted) into glTF units. y omitted or blank comes back null. */
+export function parseBomInput(text: string): { x: number; y: number | null; z: number } | null {
+  const fields = text.replace(/[−–]/g, "-").replace(/[()（）]/g, " ").split(/[,，\t]/);
+  const parts = fields.length === 1 ? fields[0].trim().split(/\s+/) : fields.map(f => f.trim());
+  if (parts.length !== 3 && parts.length !== 2) return null;
+  const numbers = parts.map(p => p === "" ? null : Number(p));
+  if (numbers.some(n => n !== null && !Number.isFinite(n))) return null;
+  const [x, y, z] = parts.length === 2 ? [numbers[0], null, numbers[1]] : numbers;
+  if (x === null || z === null) return null;
+  return { x: bomToGltf(x), y: y === null ? null : bomToGltf(y), z: bomToGltf(z) };
+}
+
+export function formatBom(point: ModelPoint) {
+  return `BOM (${point.map(n => Math.round(n * 100) || 0).join(", ")})`;
 }

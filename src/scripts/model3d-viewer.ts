@@ -1,5 +1,5 @@
-import { fitModelBounds, pickModelLabel, roomBounds, roomLabel, stageLabels,
-  type ModelLayout, type ModelBounds } from "../lib/model3d-layout";
+import { fitModelBounds, formatBom, parseBomInput, pickModelLabel, pointBounds, roomBounds, roomLabel,
+  stageLabels, type ModelLayout, type ModelBounds, type ModelPoint } from "../lib/model3d-layout";
 
 // The self-hosted web component exposes its scene graph after the load event.
 // Keep access to that external API here; coordinate calculations are independent.
@@ -7,8 +7,11 @@ document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
   const mv = wrap.querySelector("model-viewer") as any;
   const toggle = wrap.querySelector<HTMLButtonElement>(".model3d-menu-toggle")!;
   const menu = wrap.querySelector<HTMLElement>(".model3d-menu")!;
-  const form = wrap.querySelector<HTMLFormElement>(".model3d-floors");
+  const form = wrap.querySelector<HTMLFormElement>('[data-panel="floors"]');
   const select = form?.querySelector<HTMLSelectElement>("select");
+  const coordsForm = wrap.querySelector<HTMLFormElement>('[data-panel="coords"]');
+  const coordsInput = coordsForm?.querySelector<HTMLInputElement>("input");
+  const pin = wrap.querySelector<HTMLElement>(".model3d-pin")!;
   const info = wrap.querySelector<HTMLElement>(".model3d-pick-info")!;
   const loading = wrap.querySelector<HTMLElement>(".model3d-loading")!;
   const exitButton = wrap.querySelector<HTMLButtonElement>(".model3d-exit")!;
@@ -18,20 +21,27 @@ document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
   const initOrbit = mv.getAttribute("camera-orbit");
   const initTarget = mv.getAttribute("camera-target");
   let layout: ModelLayout | null = null;
-  let activeView: string | null = "reset";
+  let activeView: string | ModelPoint | null = "reset"; // named view, room id, or a typed point
   let cameraRequest = 0;
   let loaded = !!mv.loaded;
   let transparent = false;
   let oldOverflow = "";
   const originalMaterials = new Map<any, { color: number[]; alphaMode: string }>();
 
+  // Menu items with aria-controls expand a panel below them; at most one panel is open.
+  const expanders = [...menu.querySelectorAll<HTMLButtonElement>("[data-action][aria-controls]")]
+    .map(trigger => ({ trigger, panel: document.getElementById(trigger.getAttribute("aria-controls")!)! }));
+  const expand = (open: HTMLElement | null) => {
+    for (const { trigger, panel } of expanders) {
+      panel.hidden = panel !== open;
+      trigger.setAttribute("aria-expanded", String(panel === open));
+    }
+    open?.querySelector<HTMLElement>("select, input")?.focus();
+  };
   const setMenu = (open: boolean, restoreFocus = false) => {
     menu.hidden = !open;
     toggle.setAttribute("aria-expanded", String(open));
-    if (!open && form) {
-      form.hidden = true;
-      button("floors")?.setAttribute("aria-expanded", "false");
-    }
+    if (!open) expand(null);
     if (restoreFocus) toggle.focus({ preventScroll: true });
   };
   toggle.addEventListener("click", () => setMenu(Boolean(menu.hidden)));
@@ -39,21 +49,34 @@ document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
     if (!menu.hidden && !wrap.querySelector(".model3d-controls")!.contains(event.target as Node)) setMenu(false);
   });
   wrap.addEventListener("focusout", (event) => {
-    if (!wrap.querySelector(".model3d-controls")!.contains(event.relatedTarget as Node)) setMenu(false);
+    // A null relatedTarget means focus went nowhere in particular (browsers that do not focus a
+    // clicked button, window blur); clicks are already judged by the pointerdown handler above.
+    const next = event.relatedTarget as Node | null;
+    if (next && !wrap.querySelector(".model3d-controls")!.contains(next)) setMenu(false);
   });
-  button("floors")?.addEventListener("click", () => {
-    if (!form) return;
-    form.hidden = !form.hidden;
-    button("floors")!.setAttribute("aria-expanded", String(!form.hidden));
-    if (!form.hidden) select?.focus();
+  for (const { trigger, panel } of expanders) trigger.addEventListener("click", () => {
+    expand(panel.hidden ? panel : null);
   });
 
-  const showPicked = (label: string | null) => {
-    info.textContent = label ? info.dataset.pickedTpl!.replace("{name}", label) : info.dataset.hint!;
-    info.classList.toggle("is-picked", !!label);
+  // The pin is a model-viewer hotspot: it tracks the model and dims when the model occludes it.
+  const setInfo = (text: string | null, point: ModelPoint | null = null) => {
+    info.textContent = text ?? info.dataset.hint!;
+    info.classList.toggle("is-picked", text !== null);
+    if (point) mv.updateHotspot({ name: "hotspot-pin", position: point.join(" ") });
+    pin.hidden = !point;
+  };
+  const showPicked = (label: string | null, point: ModelPoint | null = null) => {
+    const text = [label, point && formatBom(point)].filter(Boolean).join("・");
+    setInfo(text ? info.dataset.pickedTpl!.replace("{name}", text) : null, point);
+  };
+  const pinPoint = (point: ModelPoint) => showPicked(layout && pickModelLabel(layout, point, lang), point);
+  const hitPoint = (clientX: number, clientY: number): ModelPoint | null => {
+    const hit = mv.positionAndNormalFromPoint(clientX, clientY);
+    return hit && [hit.position.x, hit.position.y, hit.position.z];
   };
 
-  const setView = async (view: string) => {
+  // Named views only move the camera; room and point views also select what they show.
+  const setView = async (view: string | ModelPoint) => {
     activeView = view;
     const request = ++cameraRequest;
     if (!loaded) return;
@@ -74,7 +97,11 @@ document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
       theta = room.floating ? 24 : 0;
       phi = room.floating ? 65 : 38;
       showPicked(roomLabel(room, lang));
-    } else showPicked(null);
+    } else if (Array.isArray(view)) {
+      bounds = pointBounds(view);
+      phi = 38;
+      pinPoint(view);
+    }
     if (bounds) {
       const rect = mv.getBoundingClientRect();
       const aspect = rect.width / Math.max(1, rect.height);
@@ -92,6 +119,7 @@ document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
     if (request === cameraRequest && matchMedia("(prefers-reduced-motion: reduce)").matches) mv.jumpCameraToGoal();
   };
   for (const action of ["reset", "overview"]) button(action)?.addEventListener("click", () => {
+    showPicked(null);
     void setView(action);
     setMenu(false, true);
   });
@@ -99,6 +127,39 @@ document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
     event.preventDefault();
     if (select?.value) void setView(select.value);
     setMenu(false, true);
+  });
+
+  // Height of the topmost surface at (x, z): jump the camera straight above it and cast through
+  // the viewport centre. No frame renders in between, so a miss restores the view unnoticed and
+  // a hit lets the glide to the final view start overhead.
+  const surfaceHeight = async (x: number, z: number) => {
+    ++cameraRequest;
+    const orbit = mv.getCameraOrbit().toString(), target = mv.getCameraTarget().toString();
+    mv.cameraTarget = `${x}m 3m ${z}m`;
+    mv.cameraOrbit = "0deg 0deg 60m";
+    mv.jumpCameraToGoal();
+    await mv.updateComplete;
+    const rect = mv.getBoundingClientRect();
+    const hit = hitPoint(rect.x + rect.width / 2, rect.y + rect.height / 2);
+    if (hit) return hit[1];
+    mv.cameraOrbit = orbit;
+    mv.cameraTarget = target;
+    mv.jumpCameraToGoal();
+    return null;
+  };
+  coordsInput?.addEventListener("input", () => coordsInput.setCustomValidity(""));
+  coordsForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const parsed = parseBomInput(coordsInput!.value);
+    if (!parsed) {
+      coordsInput!.setCustomValidity(ui.coordsInvalid);
+      coordsInput!.reportValidity();
+      return;
+    }
+    setMenu(false, true);
+    const y = parsed.y ?? await surfaceHeight(parsed.x, parsed.z);
+    if (y === null) setInfo(ui.coordsNoSurface);
+    else void setView([parsed.x, y, parsed.z]);
   });
   mv.addEventListener("camera-change", (event: any) => {
     if (event.detail.source === "user-interaction") { activeView = null; ++cameraRequest; }
@@ -122,6 +183,7 @@ document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
       });
     }
     if (button("transparency")) button("transparency")!.disabled = !originalMaterials.size;
+    button("coords")?.removeAttribute("disabled");
     transparent = false;
     button("transparency")?.setAttribute("aria-pressed", "false");
     if (activeView) void setView(activeView);
@@ -182,6 +244,7 @@ document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
     if (event.key === "Escape") {
       if (!menu.hidden) { event.preventDefault(); setMenu(false, true); }
       else if (isFullscreen()) { event.preventDefault(); void leaveFullscreen(); }
+      else if (!pin.hidden && wrap.contains(document.activeElement)) showPicked(null);
     }
     // Keep keyboard focus within the expanded viewer in the CSS fallback too.
     if (event.key === "Tab" && isFullscreen()) {
@@ -231,8 +294,8 @@ document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
     if (!pointers.size) pointerStart = null;
   });
   mv.addEventListener("click", (event: MouseEvent) => {
-    if (!layout || dragged) return;
-    const hit = mv.positionAndNormalFromPoint(event.clientX, event.clientY);
-    showPicked(hit ? pickModelLabel(layout, [hit.position.x, hit.position.y, hit.position.z], lang) : null);
+    if (dragged || !loaded) return;
+    const point = hitPoint(event.clientX, event.clientY);
+    if (point) pinPoint(point); else showPicked(null);
   });
 });

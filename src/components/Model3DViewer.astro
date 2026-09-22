@@ -27,6 +27,7 @@ const t = uiStrings[lang];
 const resolve = (path: string) => `${BASE}/${path.replace(/^\//, "")}`;
 const menuId = `model3d-menu-${crypto.randomUUID()}`;
 const floorsId = `${menuId}-floors`;
+const coordsId = `${menuId}-coords`;
 const sizeStyle = aspectRatio
   ? `--mv-height:auto; --mv-aspect:${aspectRatio}; --mv-aspect-mobile:${mobileAspectRatio ?? aspectRatio};`
   : `--mv-height:${height ?? "480px"};`;
@@ -37,7 +38,8 @@ const sizeStyle = aspectRatio
   data-transparency-materials={transparencyMaterials?.join(",")} data-transparency-opacity={transparencyOpacity}
   data-ui={JSON.stringify({ loading: t.model3dLoading, error: t.model3dLoadError,
     layoutError: t.model3dLayoutError, fullscreen: t.model3dFullscreenLabel,
-    exitFullscreen: t.model3dExitFullscreenLabel })}>
+    exitFullscreen: t.model3dExitFullscreenLabel, coordsInvalid: t.model3dCoordsInvalid,
+    coordsNoSurface: t.model3dCoordsNoSurface })}>
   <div class="model3d-stage" style={sizeStyle}>
     <model-viewer src={resolve(src)} alt={alt} poster={poster && resolve(poster)} poster-alt={posterAlt}
       camera-controls touch-action="none" interaction-prompt="none" loading="lazy"
@@ -45,6 +47,8 @@ const sizeStyle = aspectRatio
       min-camera-orbit={`auto 0deg ${minZoomDistance}m`} max-camera-orbit={`auto 88deg ${maxZoomDistance}m`}
       shadow-intensity="0" exposure="1" class="model3d-viewer">
       <div slot="progress-bar" class="model3d-progress" aria-hidden="true"></div>
+      <div slot="hotspot-pin" class="model3d-pin" data-position="0 0 0" data-normal="0 1 0"
+        role="img" aria-label={t.model3dPinLabel} hidden></div>
     </model-viewer>
     <span class="model3d-loading" role="status">{t.model3dLoading}</span>
     <div class="model3d-controls">
@@ -62,10 +66,22 @@ const sizeStyle = aspectRatio
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5" /></svg>
             <span>{t.model3dFloorsLabel}</span>
           </button>
-          <form id={floorsId} class="model3d-floors" hidden>
+          <form id={floorsId} class="model3d-panel" data-panel="floors" hidden>
             <label for={`${floorsId}-select`}>{t.model3dSelectFloor}</label>
             <div class="model3d-floor-input">
               <select id={`${floorsId}-select`} name="floor" required></select>
+              <button type="submit">{t.model3dGoLabel}</button>
+            </div>
+          </form>
+          <button type="button" class="model3d-action" data-action="coords" aria-expanded="false" aria-controls={coordsId} disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10Z" /><circle cx="12" cy="11" r="2" /></svg>
+            <span>{t.model3dCoordsLabel}</span>
+          </button>
+          <form id={coordsId} class="model3d-panel" data-panel="coords" hidden>
+            <label for={`${coordsId}-input`}>{t.model3dCoordsField}</label>
+            <div class="model3d-floor-input">
+              <input id={`${coordsId}-input`} name="coords" type="text" inputmode="text" autocomplete="off"
+                spellcheck="false" enterkeyhint="go" placeholder={t.model3dCoordsPlaceholder} required />
               <button type="submit">{t.model3dGoLabel}</button>
             </div>
           </form>
@@ -129,11 +145,15 @@ const sizeStyle = aspectRatio
   .model3d-action .model3d-check { margin-left: auto; visibility: hidden; width: 16px; }
   .model3d-action[aria-pressed="true"] .model3d-check { visibility: visible; }
   .model3d-wrap :is(button, select):focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
-  .model3d-floors { margin: 2px 6px 8px; padding: 10px; border-radius: 4px; background: var(--bg); }
-  .model3d-floors label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .model3d-panel { margin: 2px 6px 8px; padding: 10px; border-radius: 4px; background: var(--bg); }
+  .model3d-panel label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
   .model3d-floor-input { display: flex; gap: 6px; }
-  .model3d-floor-input :is(select, button) { min-height: 44px; border: 1px solid var(--border-strong); border-radius: 4px; font-size: 13px; }
-  .model3d-floor-input select { flex: 1; min-width: 0; background: var(--surface); color: var(--ink); padding: 0 6px; }
+  .model3d-floor-input :is(select, input, button) { min-height: 44px; border: 1px solid var(--border-strong); border-radius: 4px; font-family: inherit; font-size: 13px; }
+  .model3d-floor-input :is(select, input) { flex: 1; min-width: 0; background: var(--surface); color: var(--ink); padding: 0 6px; }
+  .model3d-pin {
+    width: 12px; height: 12px; border-radius: 50%; background: var(--ink); border: 2px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--border-strong), 0 2px 6px #0006; pointer-events: none;
+  }
   .model3d-floor-input button { padding: 0 10px; background: var(--ink); color: var(--bg); cursor: pointer; }
   .model3d-pick-info { margin-top: 8px; font-size: 13px; color: var(--muted); line-height: 1.6; }
   .model3d-pick-info.is-picked { color: var(--ink); }

@@ -17,7 +17,9 @@
     "media:verify-refs": "node --experimental-strip-types scripts/media-manifest.mjs --verify-references",
     "ja:draft": "node --experimental-strip-types scripts/gen-ja-draft.mjs",
     "og:gen": "node scripts/gen-og-image.mjs",
-    "data:verify": "node --experimental-strip-types scripts/verify-data.mjs"
+    "data:verify": "node --experimental-strip-types scripts/verify-data.mjs",
+    "tots:sync": "node --experimental-strip-types scripts/sync-tots-web.mjs",
+    "tots:verify": "astro build && node --experimental-strip-types scripts/verify-tots-model.mjs"
   },
   "engines": {
     "node": ">=22.6"
