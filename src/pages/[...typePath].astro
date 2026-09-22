@@ -609,7 +609,7 @@ function toTabRenderItems(items: { m: TypeMethod; i: number }[]): TabRenderItem[
     {/* 3D 模型參考：獨立全寬區塊（不塞進右欄，避免只有 C 欄寬度太窄），置於注意事項之上 */}
     {content?.model3d && (
       <div class="prose-custom mt-10 border-t border-border-soft pt-10">
-        <h2>{t.sectionModel}</h2>
+        <h2 id="map-model" class="scroll-mt-24">{t.sectionModel}</h2>
         <Model3DViewer
           lang={lang}
           src={content.model3d.src}
@@ -618,15 +618,11 @@ function toTabRenderItems(items: { m: TypeMethod; i: number }[]): TabRenderItem[
           posterAlt={content.model3d.posterAlt}
           cameraOrbit={content.model3d.cameraOrbit}
           cameraTarget={content.model3d.cameraTarget}
-          overviewOrbit={content.model3d.overviewOrbit}
-          overviewTarget={content.model3d.overviewTarget}
-          topOrbit={content.model3d.topOrbit}
-          topTarget={content.model3d.topTarget}
           layoutSrc={content.model3d.layoutSrc}
           transparencyMaterials={content.model3d.transparencyMaterials}
           transparencyOpacity={content.model3d.transparencyOpacity}
-          aspectRatio="2/1"
-          mobileAspectRatio="4/3"
+          aspectRatio="4/3"
+          mobileAspectRatio="3/4"
         />
         {content.model3d.legend && content.model3d.legend.length > 0 && (
           <>

@@ -147,13 +147,9 @@ export interface TypeContent {
     posterAlt?: string;
     cameraOrbit?: string;  // 初始視角 "方位角 仰角 距離"，例："15deg 45deg auto"
     cameraTarget?: string; // 初始注視點 "Xm Ym Zm"（glTF 座標，Y 朝上）
-    overviewOrbit?: string;  // 「總覽」按鈕視角／注視點（見 Model3DViewer 的 Props 註解）
-    overviewTarget?: string;
-    topOrbit?: string;       // 「俯視」按鈕視角；不給 topTarget 則沿用 overviewTarget
-    topTarget?: string;
     layoutSrc?: string;    // 點擊互動座標表 JSON 路徑（public/ 下），點擊房間顯示名稱
     legend?: { color: string; label: string }[]; // 色彩圖例（顯示於模型下方）
-    transparencyMaterials?: string[]; // 「透明化」開關鈕要調整的材質名稱（不含 "ToTS_" 前綴），
+    transparencyMaterials?: string[]; // 「透明化」開關鈕要調整的材質名稱（GLB 中的完整材質名稱），
     // 有給值才顯示按鈕，只影響這些材質，其餘（含樓層文字）不受影響
     transparencyOpacity?: number;     // 透明化後的不透明度（0～1），預設 0.2
   }; // C 區改放可拖曳旋轉的 3D 模型（取代快速示意）
@@ -1066,55 +1062,24 @@ export const typeContent: Record<string, TypeContent> = {
 
   "botw-08": {
     model3d: {
-      src: "/tots-model/model/tots-model.glb",
-      alt: "劍之考驗地圖參照模型",
-      // 初始視角：注視高原房間群中心（glTF 座標，Blender (x,y,z) → glTF (x,z,-y)）。
-      // 方位角 60°／極角 55°：極角 45° 時中級盆地的凹陷幾乎看不出深度（視角太接近正上方，
-      // 只剩地板顏色差異，看起來像被「填平」了），55° 才能露出盆地邊坡的落差；
-      // 方位角從 15° 轉到 60° 是為了閃開導師之塔——15° 時攝影機到房間群的視線幾乎與
-      // 塔正對，塔會直接擋在房間群前面，60° 時塔完全在畫面外。
-      // 距離必須明寫成 1400m，不能用 auto——auto 是依「整個場景」（含外圍很大一圈的海面）
-      // 自動抓縮放，算出來的距離會把整張地圖都塞進畫面，導致房間群變得很小、
-      // 塔反而在近景顯得巨大，等於白做了方位角閃塔的調整。
-      cameraOrbit: "60deg 55deg 1400m",
-      cameraTarget: "-515m 80m -330m",
-      // 「總覽」：拉遠到同時看見高原、平原與導師之塔，注視點改用整個實體地形（不含外圍海面）
-      // 的重心，而不是房間群中心，距離／極角都要明寫（理由同上，auto 會把海面也框進去）。
-      overviewOrbit: "25deg 62deg 2200m",
-      overviewTarget: "-284m 60m 43m",
-      // 「俯視」：極角壓到接近 0（正上方往下看），方便看清楚房間排版；沿用總覽的注視點，
-      // 距離加大一點確保接近垂直俯視時仍能框住整個地形範圍。
-      topOrbit: "0deg 90deg 3200m",
-      poster: "/tots-model/model/poster.jpg",
-      posterAlt: "劍之考驗地圖模型載入中的預覽圖",
-      layoutSrc: "/tots-model/model/tots-layout.json",
-      // 色彩圖例：對應 blender-tots/generate_tots_model.py 的 PALETTE 房間屬性色
+      src: "/tots-model/v2/tots-20260921d.glb",
+      alt: "劍之考驗高原、各關卡樓層與黑塔盆地的 3D 地圖模型",
+      // glTF=(BOM.x, BOM.y, BOM.z)*0.01。載入座標表後依容器比例精確取景。
+      cameraOrbit: "0deg 0deg 135m",
+      cameraTarget: "-35.25m 6.059m -12.075m",
+      poster: "/tots-model/v2/poster-20260921d.jpg",
+      posterAlt: "劍之考驗高原與黑塔盆地的北向上視圖",
+      layoutSrc: "/tots-model/v2/layout-20260921d.json",
       legend: [
-        { color: "#d8d4c8", label: "一般房間" },
-        { color: "#46d2e0", label: "水域" },
-        { color: "#242a6e", label: "奈落（中級1-4F）" },
-        { color: "#17161a", label: "黑暗（中級6-10F）" },
-        { color: "#f2d43d", label: "雷雨（頂級1-5F）" },
-        { color: "#f0801f", label: "火山（頂級7-11F）" },
-        { color: "#a8dde6", label: "寒冷（頂級13-17F）" },
-        { color: "#22c55e", label: "起點" },
-        { color: "#9fd6c8", label: "休息平台" },
-        { color: "#34b8a0", label: "綠洲" },
-        { color: "#b09a78", label: "盆地地標" },
-        { color: "#4a4d52", label: "導師之塔" },
+        { color: "#91a963", label: "高原／平原" },
+        { color: "#324656", label: "黑暗遮罩" },
+        { color: "#358b9e", label: "水池" },
+        { color: "#e9662e", label: "熔岩" },
+        { color: "#dce7e3", label: "雪地" },
+        { color: "#34505a", label: "黑塔" },
       ],
-      // 「透明化」開關鈕：只調整戰鬥房間（一般房間／水域／奈落／黑暗／雷雨／火山／寒冷）
-      // 的材質透明度，起點／休息平台／綠洲／盆地地標等非戰鬥房間、地面與樓層文字都不受影響。
-      transparencyMaterials: [
-        "normal", "normal_side",
-        "water", "water_side",
-        "void", "void_side",
-        "dark", "dark_side",
-        "storm", "storm_side",
-        "volcano", "volcano_side",
-        "frigid", "frigid_side",
-      ],
-      transparencyOpacity: 0.2,
+      transparencyMaterials: ["TOTS2_wall", "TOTS2_wall_dark", "TOTS2_青色結界"],
+      transparencyOpacity: 0.22,
     },
     methods: [
       {

@@ -1,379 +1,159 @@
 ---
-// 可拖曳旋轉／縮放的 3D 模型檢視器，包裝 Google 的 <model-viewer> web component。
-// 函式庫自行架設在 public/vendor/model-viewer.min.js（不依賴外部 CDN），
-// 模型檔（.glb）放在 public/ 下由呼叫端指定路徑。
 import { uiStrings, type Lang } from "../data/ui-strings";
 interface Props {
   lang?: Lang;
-  src: string;          // GLB 檔路徑（相對於 BASE_URL），例："/tots-model/model/tots-model.glb"
+  src: string;
   alt: string;
-  poster?: string;      // 低解析度封面圖路徑（相對於 BASE_URL）。不給值則沿用 model-viewer
-                        // 預設的純色封面（--poster-color 已設為透明）。
+  poster?: string;
   posterAlt?: string;
-  height?: string;             // 固定 CSS 高度（與 aspectRatio 擇一；三者皆未填則預設 480px）
-  aspectRatio?: string;        // 長寬比（例如 "1/1"、"2/1"），預設（桌機／未特別指定寬度時）使用
-  mobileAspectRatio?: string;  // 窄螢幕（≤767px，與版面切成單欄的中斷點一致）時改用的長寬比，
-                                // 沒填就沿用 aspectRatio——寬螢幕全寬時通常想要比較「扁」的比例，
-                                // 但同一個比例套到手機窄版會太矮，所以拆成兩個中斷點各自設定。
-  autoRotate?: boolean;  // 預設不自動旋轉，讓使用者主動操作
-  minZoomDistance?: number;  // 最近可縮放距離（絕對數值，不受模型整體包圍盒大小影響），預設 60
-  maxZoomDistance?: number;  // 最遠可縮放距離，預設 2500
-  cameraOrbit?: string;   // 初始視角 "方位角 仰角 距離"（例："15deg 45deg auto"）。
-                          // 不填則沿用 model-viewer 預設的自動取景。
-  cameraTarget?: string;  // 初始注視點 "Xm Ym Zm"（glTF 座標，Y 朝上）。不填＝自動置中。
-  layoutSrc?: string;     // 點擊互動用的座標表 JSON（相對於 BASE_URL；enhance 腳本輸出的
-                          // tots-layout.json 格式）。有給值時，點擊模型會顯示房間／地標名稱。
-  overviewOrbit?: string;   // 「總覽」按鈕的視角／注視點：拉遠到看見整個地形（高原＋平原＋
-  overviewTarget?: string; // 導師之塔）。不給值則不顯示「總覽」按鈕（scene 含外圍海面，
-                          // 用 model-viewer 預設的 auto 自動取景會把整張地圖都塞進畫面，
-                          // 房間反而變得很小，所以固定給一組明確數值，跟 cameraOrbit 同理）。
-  topOrbit?: string;      // 「俯視」按鈕的視角：極角接近 0（正上方往下看），方便看清楚
-  topTarget?: string;     // 房間排版。不給 topTarget 則沿用 overviewTarget。同樣不給值則不顯示按鈕。
-  transparencyMaterials?: string[]; // 「透明化」開關鈕要調整的材質名稱（不含 "ToTS_" 前綴），
-                                     // 有給值時才顯示按鈕；只調整這些材質的 alpha，其餘（含樓層
-                                     // 文字標籤）完全不受影響。
-  transparencyOpacity?: number;     // 透明化後的不透明度（0～1），預設 0.2
+  height?: string;
+  aspectRatio?: string;
+  mobileAspectRatio?: string;
+  minZoomDistance?: number;
+  maxZoomDistance?: number;
+  cameraOrbit?: string;
+  cameraTarget?: string;
+  layoutSrc?: string;
+  transparencyMaterials?: string[];
+  transparencyOpacity?: number;
 }
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 const {
-  lang = "zh", src, alt, poster, posterAlt, height, aspectRatio, mobileAspectRatio, autoRotate = false,
-  minZoomDistance = 60, maxZoomDistance = 2500,
-  cameraOrbit, cameraTarget, layoutSrc,
-  overviewOrbit, overviewTarget, topOrbit, topTarget,
-  transparencyMaterials, transparencyOpacity = 0.2,
+  lang = "zh", src, alt, poster, posterAlt, height, aspectRatio, mobileAspectRatio,
+  minZoomDistance = 0.8, maxZoomDistance = 400, cameraOrbit, cameraTarget,
+  layoutSrc, transparencyMaterials, transparencyOpacity = 0.22,
 } = Astro.props;
 const t = uiStrings[lang];
-const resolvedTopTarget = topTarget ?? overviewTarget;
-const layoutUrl = layoutSrc
-  ? `${BASE}${layoutSrc.startsWith("/") ? layoutSrc : `/${layoutSrc}`}`
-  : undefined;
-const modelSrc = `${BASE}${src.startsWith("/") ? src : `/${src}`}`;
-const posterUrl = poster
-  ? `${BASE}${poster.startsWith("/") ? poster : `/${poster}`}`
-  : undefined;
-// aspect-ratio 本身故意「不」放進 inline style：model-viewer 的 shadow DOM 內建
-// :host { height:150px }，一旦 height 是明確值 aspect-ratio 就不會再補算，所以這裡改成只丟兩個
-// CSS 變數進去，實際的 height/aspect-ratio 交給下面 <style> 裡的規則（含中斷點）統一決定，
-// 這樣媒體查詢才有辦法在窄螢幕時覆蓋成另一個比例（inline style 的優先權高於外部樣式規則，
-// 若把 aspect-ratio 直接寫進 inline style，媒體查詢就永遠蓋不掉它）。
+const resolve = (path: string) => `${BASE}/${path.replace(/^\//, "")}`;
+const menuId = `model3d-menu-${crypto.randomUUID()}`;
+const floorsId = `${menuId}-floors`;
 const sizeStyle = aspectRatio
-  ? `width:100%; height:auto; --mv-aspect:${aspectRatio}; --mv-aspect-mobile:${mobileAspectRatio ?? aspectRatio};`
-  : `width:100%; height:${height ?? "480px"};`;
-// min/max-camera-orbit 用「m」為單位的絕對距離，不用百分比——百分比是相對於場景包圍球
-// 自動計算的預設值，模型整體（例如海面範圍）變大時百分比對應的實際距離也會跟著變遠，
-// 縮放限制就形同虛設；寫死絕對距離才能保證不管場景多大，都能貼近到看清楚房間等級的細節。
-const minOrbit = `auto auto ${minZoomDistance}m`;
-const maxOrbit = `auto auto ${maxZoomDistance}m`;
+  ? `--mv-height:auto; --mv-aspect:${aspectRatio}; --mv-aspect-mobile:${mobileAspectRatio ?? aspectRatio};`
+  : `--mv-height:${height ?? "480px"};`;
 ---
 
 <script is:inline src={`${BASE}/vendor/model-viewer.min.js`} type="module"></script>
-
-<div
-  class="model3d-wrap"
-  data-layout-src={layoutUrl}
-  data-overview-orbit={overviewOrbit}
-  data-overview-target={overviewTarget}
-  data-top-orbit={topOrbit}
-  data-top-target={resolvedTopTarget}
-  data-transparency-materials={transparencyMaterials?.join(",")}
-  data-transparency-opacity={transparencyOpacity}
->
-  <!-- model-viewer 的布林屬性不能輸出成 autoplay="false"／auto-rotate="false"：
-       HTML 只要看見屬性存在就會視為 true，導致閒置後自動旋轉。 -->
-  <model-viewer
-    src={modelSrc}
-    alt={alt}
-    poster={posterUrl}
-    poster-alt={posterAlt}
-    camera-controls
-    touch-action="none"
-    interaction-prompt="none"
-    camera-orbit={cameraOrbit}
-    camera-target={cameraTarget}
-    min-camera-orbit={minOrbit}
-    max-camera-orbit={maxOrbit}
-    shadow-intensity="0.35"
-    exposure="1.0"
-    autoplay={autoRotate ? true : undefined}
-    auto-rotate={autoRotate ? true : undefined}
-    style={`${sizeStyle} --poster-color: transparent;`}
-    class="model3d-viewer"
-  >
-    <div slot="progress-bar"></div>
-  </model-viewer>
-  <div class="model3d-controls">
-    {overviewOrbit && (
-      <button type="button" class="model3d-btn model3d-overview" aria-label={t.model3dOverviewLabel} title={t.model3dOverviewLabel}>
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"></path>
-        </svg>
+<div class="model3d-wrap" data-lang={lang} data-layout-src={layoutSrc && resolve(layoutSrc)}
+  data-transparency-materials={transparencyMaterials?.join(",")} data-transparency-opacity={transparencyOpacity}
+  data-ui={JSON.stringify({ loading: t.model3dLoading, error: t.model3dLoadError,
+    layoutError: t.model3dLayoutError, fullscreen: t.model3dFullscreenLabel,
+    exitFullscreen: t.model3dExitFullscreenLabel })}>
+  <div class="model3d-stage" style={sizeStyle}>
+    <model-viewer src={resolve(src)} alt={alt} poster={poster && resolve(poster)} poster-alt={posterAlt}
+      camera-controls touch-action="none" interaction-prompt="none" loading="lazy"
+      camera-orbit={cameraOrbit} camera-target={cameraTarget} field-of-view="30deg"
+      min-camera-orbit={`auto 0deg ${minZoomDistance}m`} max-camera-orbit={`auto 88deg ${maxZoomDistance}m`}
+      shadow-intensity="0" exposure="1" class="model3d-viewer">
+      <div slot="progress-bar" class="model3d-progress" aria-hidden="true"></div>
+    </model-viewer>
+    <span class="model3d-loading" role="status">{t.model3dLoading}</span>
+    <div class="model3d-controls">
+      <button type="button" class="model3d-menu-toggle" aria-label={t.model3dMenuLabel}
+        aria-expanded="false" aria-controls={menuId} title={t.model3dMenuLabel}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
       </button>
-    )}
-    {topOrbit && (
-      <button type="button" class="model3d-btn model3d-top" aria-label={t.model3dTopLabel} title={t.model3dTopLabel}>
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-          <ellipse cx="12" cy="12" rx="9" ry="5"></ellipse>
-          <ellipse cx="12" cy="12" rx="3.4" ry="1.9"></ellipse>
-        </svg>
-      </button>
-    )}
-    <button type="button" class="model3d-btn model3d-reset" aria-label={t.model3dResetLabel} title={t.model3dResetLabel}>
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 12a9 9 0 1 0 3-6.7"></path>
-        <path d="M3 4v5h5"></path>
-      </svg>
-    </button>
-    {transparencyMaterials && transparencyMaterials.length > 0 && (
-      <button
-        type="button"
-        class="model3d-btn model3d-transparency"
-        aria-label={t.model3dTransparencyLabel}
-        aria-pressed="false"
-        title={t.model3dTransparencyLabel}
-      >
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 3c3.5 4.2 6 7.7 6 10.5A6 6 0 0 1 6 13.5C6 10.7 8.5 7.2 12 3Z" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg>
-      </button>
-    )}
-  </div>
-  {layoutUrl && (
-    <div
-      class="model3d-pick-info"
-      data-hint={t.model3dPickInfo}
-      data-picked-tpl={t.model3dPickedTemplate}
-    >
-      {t.model3dPickInfo}
+      <div id={menuId} class="model3d-menu" hidden>
+        <button type="button" class="model3d-action" data-action="reset">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11a9 9 0 1 1 2 7M3 4v7h7" /></svg>
+          <span>{t.model3dResetLabel}<small>{t.model3dResetHint}</small></span>
+        </button>
+        {layoutSrc && <>
+          <button type="button" class="model3d-action" data-action="floors" aria-expanded="false" aria-controls={floorsId} disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5" /></svg>
+            <span>{t.model3dFloorsLabel}</span>
+          </button>
+          <form id={floorsId} class="model3d-floors" hidden>
+            <label for={`${floorsId}-select`}>{t.model3dSelectFloor}</label>
+            <div class="model3d-floor-input">
+              <select id={`${floorsId}-select`} name="floor" required></select>
+              <button type="submit">{t.model3dGoLabel}</button>
+            </div>
+          </form>
+        </>}
+        {transparencyMaterials?.length && <button type="button" class="model3d-action" data-action="transparency" aria-pressed="false" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5v8l-9 5-9-5V8l9-5ZM3 8l9 5 9-5M12 13v8M12 3v10" /></svg>
+          <span>{t.model3dTransparencyLabel}</span>
+          <svg class="model3d-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>
+        </button>}
+        {layoutSrc && <button type="button" class="model3d-action" data-action="overview" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6ZM9 3v15M15 6v15" /></svg>
+          <span>{t.model3dOverviewLabel}</span>
+        </button>}
+        <button type="button" class="model3d-action" data-action="fullscreen" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5" /></svg>
+          <span>{t.model3dFullscreenLabel}</span>
+        </button>
+      </div>
     </div>
-  )}
+    <button type="button" class="model3d-exit" hidden aria-label={t.model3dExitFullscreenLabel}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+      {t.model3dExitFullscreenLabel}
+    </button>
+  </div>
+  <div class="model3d-pick-info" role="status" data-hint={t.model3dPickInfo} data-picked-tpl={t.model3dPickedTemplate}>
+    {t.model3dPickInfo}
+  </div>
 </div>
 
 <style>
-  .model3d-wrap {
-    position: relative;
-  }
+  .model3d-wrap { position: relative; }
+  .model3d-stage { position: relative; }
   .model3d-viewer {
-    border-radius: 5px;
-    background: var(--surface);
-    box-shadow: 0 0 0 1px var(--border-strong);
+    display: block; width: 100%; height: var(--mv-height, 480px); aspect-ratio: var(--mv-aspect, auto); max-height: 72svh;
+    border-radius: 5px; background: var(--surface); box-shadow: 0 0 0 1px var(--border-strong);
+    --poster-color: transparent;
   }
-  /* 沒有給 --mv-aspect 時 var() 會 fallback 成 auto，讓 inline 的固定 height 生效；
-     有給值時則由這裡（而非 inline style）決定 aspect-ratio，中斷點才有辦法覆蓋它。 */
-  .model3d-viewer {
-    aspect-ratio: var(--mv-aspect, auto);
+  .model3d-wrap [hidden] { display: none !important; }
+  .model3d-wrap svg { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .model3d-controls { position: absolute; top: 12px; right: 12px; z-index: 2; }
+  .model3d-menu-toggle, .model3d-exit {
+    display: flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px;
+    color: var(--ink); background: var(--surface); border: 1px solid var(--border-strong); border-radius: 6px; cursor: pointer;
+    box-shadow: 0 2px 10px #00000012;
   }
+  .model3d-menu-toggle:hover, .model3d-menu-toggle[aria-expanded="true"] { border-color: var(--brand); color: var(--brand); }
+  .model3d-menu {
+    position: absolute; right: 0; top: 52px; width: 258px; max-width: calc(100vw - 72px);
+    max-height: min(420px, 65vh); overflow-y: auto; overscroll-behavior: contain; padding: 6px;
+    border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface);
+    box-shadow: 0 8px 28px #00000024; color: var(--ink);
+  }
+  .model3d-action {
+    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; padding: 10px;
+    text-align: left; font: inherit; font-size: 14px; line-height: 1.4; border: 0; border-radius: 4px;
+    color: var(--ink); background: transparent; cursor: pointer;
+  }
+  .model3d-action:hover, .model3d-action[aria-pressed="true"] { background: var(--bg); color: var(--brand); }
+  .model3d-action:disabled { opacity: .45; cursor: wait; }
+  .model3d-action small { display: block; margin-top: 3px; font-size: 11px; color: var(--muted); }
+  .model3d-action .model3d-check { margin-left: auto; visibility: hidden; width: 16px; }
+  .model3d-action[aria-pressed="true"] .model3d-check { visibility: visible; }
+  .model3d-wrap :is(button, select):focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .model3d-floors { margin: 2px 6px 8px; padding: 10px; border-radius: 4px; background: var(--bg); }
+  .model3d-floors label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .model3d-floor-input { display: flex; gap: 6px; }
+  .model3d-floor-input :is(select, button) { min-height: 44px; border: 1px solid var(--border-strong); border-radius: 4px; font-size: 13px; }
+  .model3d-floor-input select { flex: 1; min-width: 0; background: var(--surface); color: var(--ink); padding: 0 6px; }
+  .model3d-floor-input button { padding: 0 10px; background: var(--ink); color: var(--bg); cursor: pointer; }
+  .model3d-pick-info { margin-top: 8px; font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .model3d-pick-info.is-picked { color: var(--ink); }
+  .model3d-loading { position: absolute; left: 12px; bottom: 12px; padding: 6px 10px; border-radius: 4px; background: var(--surface); color: var(--muted); font-size: 12px; pointer-events: none; }
+  .model3d-progress { position: absolute; top: 0; left: 0; height: 3px; width: calc(var(--progress, 0) * 100%); background: var(--brand); }
+  .model3d-exit { position: absolute; left: 12px; top: 12px; z-index: 2; gap: 6px; padding: 0 12px; font-size: 13px; }
+  .model3d-wrap:fullscreen, .model3d-wrap.is-fullscreen {
+    display: flex; flex-direction: column; background: var(--surface); padding: 12px;
+    width: 100%; height: 100%; box-sizing: border-box;
+  }
+  .model3d-wrap.is-fullscreen { position: fixed; inset: 0; z-index: 100; height: 100dvh; }
+  .model3d-wrap:is(:fullscreen, .is-fullscreen) .model3d-stage { flex: 1; min-height: 0; }
+  .model3d-wrap:is(:fullscreen, .is-fullscreen) .model3d-viewer { height: 100%; aspect-ratio: auto; max-height: none; }
+  .model3d-wrap:is(:fullscreen, .is-fullscreen) .model3d-pick-info { flex: none; }
   @media (max-width: 767px) {
-    .model3d-viewer {
-      aspect-ratio: var(--mv-aspect-mobile, var(--mv-aspect, auto));
-    }
-  }
-  .model3d-controls {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    gap: 6px;
-  }
-  .model3d-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 999px;
-    border: 1px solid var(--border-strong);
-    background: var(--surface);
-    color: var(--text);
-    cursor: pointer;
-    transition: border-color 0.15s, color 0.15s;
-  }
-  .model3d-btn:hover {
-    border-color: var(--brand);
-    color: var(--brand);
-  }
-  .model3d-btn[aria-pressed="true"] {
-    border-color: var(--ink);
-    background: var(--ink);
-    color: var(--bg);
-  }
-  .model3d-hint {
-    position: absolute;
-    left: 50%;
-    bottom: 14px;
-    transform: translateX(-50%);
-    padding: 6px 14px;
-    border-radius: 999px;
-    background: var(--ink);
-    color: var(--bg);
-    font-size: 12.5px;
-    white-space: nowrap;
-    opacity: 0.9;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-  }
-  .model3d-hint.is-hidden {
-    opacity: 0;
-  }
-  .model3d-pick-info {
-    margin-top: 8px;
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-  .model3d-pick-info.is-picked {
-    color: var(--ink);
+    .model3d-viewer { aspect-ratio: var(--mv-aspect-mobile, var(--mv-aspect, auto)); }
+    .model3d-controls { top: 10px; right: 10px; }
   }
 </style>
 
 <script>
-  document.querySelectorAll<HTMLElement>(".model3d-wrap").forEach((wrap) => {
-    const mv = wrap.querySelector("model-viewer") as any;
-    if (!mv) return;
-
-    // 保險機制：<model-viewer> 的自動揭示（reveal）在部分情況下（load 事件與 loaded
-    // 屬性更新有時間差、IntersectionObserver 未即時觸發等）不會準時執行，導致模型明明
-    // 載入完成卻停留在黑色海報畫面。這裡在載入完成後主動呼叫 dismissPoster()，並在短時間內
-    // 反覆確認（modelIsVisible 為 false 就再呼叫一次），確保一定會顯示出來。
-    const reveal = () => mv.dismissPoster?.();
-    reveal();
-    mv.addEventListener("load", reveal);
-    let tries = 0;
-    const timer = setInterval(() => {
-      tries += 1;
-      if (mv.modelIsVisible || tries > 30) {
-        clearInterval(timer);
-        return;
-      }
-      reveal();
-    }, 100);
-
-    // 重置視角：回到「初始設定的視角」——若元件有指定 camera-orbit/camera-target
-    // 就回到指定值，沒有指定則回到 "auto"（model-viewer 自動取景）。
-    // 初始值要在使用者操作之前先讀起來（操作後屬性值會被 model-viewer 更新）。
-    const initOrbit = mv.getAttribute("camera-orbit") || "auto auto auto";
-    const initTarget = mv.getAttribute("camera-target") || "auto auto auto";
-    const resetBtn = wrap.querySelector<HTMLButtonElement>(".model3d-reset");
-    resetBtn?.addEventListener("click", () => {
-      mv.cameraOrbit = initOrbit;
-      mv.cameraTarget = initTarget;
-      mv.fieldOfView = "auto";
-    });
-
-    // 總覽／俯視：切到資料層指定的固定視角（見 Props 註解，不用 auto 是因為場景含外圍
-    // 海面，auto 會把整張地圖塞進畫面，反而看不清楚）。按鈕本身只在有給對應資料時才會渲染。
-    const overviewOrbit = wrap.dataset.overviewOrbit;
-    const overviewTarget = wrap.dataset.overviewTarget;
-    wrap.querySelector<HTMLButtonElement>(".model3d-overview")?.addEventListener("click", () => {
-      if (overviewOrbit) mv.cameraOrbit = overviewOrbit;
-      if (overviewTarget) mv.cameraTarget = overviewTarget;
-      mv.fieldOfView = "auto";
-    });
-    const topOrbit = wrap.dataset.topOrbit;
-    const topTarget = wrap.dataset.topTarget;
-    wrap.querySelector<HTMLButtonElement>(".model3d-top")?.addEventListener("click", () => {
-      if (topOrbit) mv.cameraOrbit = topOrbit;
-      if (topTarget) mv.cameraTarget = topTarget;
-      mv.fieldOfView = "auto";
-    });
-
-    // 透明化：只調整指定材質（依名稱 "ToTS_<key>" 比對）的 alpha，樓層文字等其他材質
-    // 完全不受影響。alphaMode 預設是 OPAQUE（忽略 alpha 值），要切到 BLEND 才會真的顯示透明；
-    // 切回不透明時同樣要切回 OPAQUE，避免半透明材質在某些角度出現排序瑕疵。
-    const transparencyKeys = wrap.dataset.transparencyMaterials?.split(",").filter(Boolean) ?? [];
-    const transparencyOpacity = Number(wrap.dataset.transparencyOpacity ?? "0.2");
-    const transparencyBtn = wrap.querySelector<HTMLButtonElement>(".model3d-transparency");
-    if (transparencyBtn && transparencyKeys.length > 0) {
-      let isTransparent = false;
-      const applyOpacity = (alpha: number, alphaMode: string) => {
-        const materials = mv.model?.materials ?? [];
-        for (const key of transparencyKeys) {
-          const mat = materials.find((m: any) => m.name === `ToTS_${key}`);
-          if (!mat) continue;
-          const [r, g, b] = mat.pbrMetallicRoughness.baseColorFactor;
-          mat.pbrMetallicRoughness.setBaseColorFactor([r, g, b, alpha]);
-          mat.setAlphaMode(alphaMode);
-        }
-      };
-      transparencyBtn.addEventListener("click", () => {
-        isTransparent = !isTransparent;
-        applyOpacity(isTransparent ? transparencyOpacity : 1, isTransparent ? "BLEND" : "OPAQUE");
-        transparencyBtn.setAttribute("aria-pressed", String(isTransparent));
-      });
-    }
-
-    // 首次操作提示：只在使用者「這一台裝置第一次看到這個模型」時顯示，拖曳／縮放一次或
-    // 5 秒後就淡出，之後用 sessionStorage 記住不再顯示（同一次瀏覽的其他頁籤／重整都算看過）。
-    const hintEl = wrap.querySelector<HTMLElement>(".model3d-hint");
-    if (hintEl) {
-      const hintKey = "model3d-hint-seen";
-      if (sessionStorage.getItem(hintKey)) {
-        hintEl.remove();
-      } else {
-        const dismiss = () => {
-          hintEl.classList.add("is-hidden");
-          sessionStorage.setItem(hintKey, "1");
-          setTimeout(() => hintEl.remove(), 500);
-        };
-        // camera-change 在程式化設定視角（例如載入時的初次取景）時也會觸發，detail.source
-        // 只有使用者實際拖曳／滾輪縮放時才是 "user-interaction"，藉此排除誤觸發。
-        const onCameraChange = (ev: any) => {
-          if (ev?.detail?.source === "user-interaction") {
-            mv.removeEventListener("camera-change", onCameraChange);
-            dismiss();
-          }
-        };
-        mv.addEventListener("camera-change", onCameraChange);
-        setTimeout(dismiss, 5000);
-      }
-    }
-
-    // 點擊模型顯示房間／地標名稱：用 positionAndNormalFromPoint 取得點擊處的
-    // 3D 座標（glTF 空間，Y 朝上），轉回 Blender 座標（Bx=Gx, By=-Gz, Bz=Gy）後，
-    // 對照 enhance 腳本輸出的座標表（tots-layout.json，為 .blend 內物件實際位置）。
-    const layoutSrc = wrap.dataset.layoutSrc;
-    const infoEl = wrap.querySelector<HTMLElement>(".model3d-pick-info");
-    if (layoutSrc && infoEl) {
-      let layout: any = null;
-      fetch(layoutSrc)
-        .then((r) => (r.ok ? r.json() : null))
-        .then((j) => (layout = j))
-        .catch(() => {});
-
-      const hint = infoEl.dataset.hint ?? "";
-      mv.addEventListener("click", (ev: MouseEvent) => {
-        if (!layout) return;
-        const hit = mv.positionAndNormalFromPoint?.(ev.clientX, ev.clientY);
-        let text: string | null = null;
-        if (hit) {
-          const bx = hit.position.x;
-          const by = -hit.position.z;
-          const bz = hit.position.y;
-          const room = layout.rooms?.find((r: any) =>
-            bx >= r.x0 && bx <= r.x1 && by >= r.y0 && by <= r.y1 &&
-            bz >= r.z0 - 2 && bz <= r.z1 + 8
-          );
-          if (room) {
-            text = `${room.label}（${room.attr_label}）`;
-          } else {
-            const c = layout.circles?.find((c: any) =>
-              (bx - c.x) ** 2 + (by - c.y) ** 2 <= (c.r * 1.2) ** 2 &&
-              Math.abs(bz - c.z) < 8
-            );
-            if (c) {
-              // 「盆地／綠洲」這類標籤本身就是類型名，不重複加括號
-              text = c.kind_label.startsWith(c.label) ? c.label : `${c.label}（${c.kind_label}）`;
-            } else if (layout.tower) {
-              const t = layout.tower;
-              if ((bx - t.x) ** 2 + (by - t.y) ** 2 <= (t.r * 1.3) ** 2) text = t.label;
-            }
-          }
-        }
-        // 前綴走 data 屬性帶進來的模板，不能寫死中文——這行沒有任何 fallback
-        // 路徑，寫死的話日文版 3D 模型頁會直接顯示「選取：…」。
-        const pickedTpl = infoEl.dataset.pickedTpl ?? "{name}";
-        infoEl.textContent = text ? pickedTpl.replace("{name}", text) : hint;
-        infoEl.classList.toggle("is-picked", !!text);
-      });
-    }
-  });
+  import "../scripts/model3d-viewer";
 </script>
