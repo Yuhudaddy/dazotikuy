@@ -108,6 +108,7 @@ export const typeGroups: TypeGroup[] = [
       { no: "20", zh: "硬直取消", en: "Endlag Cancel", ja: "硬直キャンセル" },
       { no: "21", zh: "沐彼", en: "Moobe", ja: "Moobe" },
       { no: "22", zh: "舉物定位傳送", en: "Lift Storage Warping", ja: "持ち上げ座標ワープ", shortEn: "LSW" },
+      { no: "23", zh: "裝備屬性轉移", en: "Weapon State Transfer", ja: "武器ステート転送", shortEn: "WST" },
     ],
   },
   {

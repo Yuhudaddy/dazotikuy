@@ -129,3 +129,9 @@
 15195497	totk-transfer/SLD.mp4
 46572	totk-transfer/SLD_Explain.png
 22974547	totk-transfer/ZLOT.mp4
+80342043	totk-wst/depths transition dcd wst.MP4
+31070859	totk-wst/drop limit dcd wst.mp4
+27294261	totk-wst/fe wst.mp4
+31006076	totk-wst/mineru fe wst.mp4
+179393920	totk-wst/moobe wst.mov
+24167300	totk-wst/unload wst.mp4

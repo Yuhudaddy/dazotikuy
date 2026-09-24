@@ -238,7 +238,7 @@ export const glossaryEntries: GlossaryEntry[] = [
   { id: "zonai-device", games: ["totk"], kind: "object", abbr: "Zonai Device", en: "Zonai Device", ja: "ゾナウギア", zh: "左納烏裝置", aliases: ["左納烏", "左納烏裝置", "Zonai"], description: "左納烏系列的可組裝裝置。", sources: ["/types/totk-13"] },
   { id: "fuse", games: ["totk"], kind: "object", abbr: "Fuse", en: "Fuse", ja: "スクラビルド（スクビル）", zh: "餘料建造", aliases: ["餘料建造", "餘料"], description: "把材料附著到武器或盾牌上使用的能力。", sources: ["/types/totk-06"] },
   { id: "enemy-pickpocket", games: ["totk"], kind: "term", abbr: "Enemy Pickpocket", en: "Enemy Pickpocketing", zh: "魔物扒竊", aliases: ["魔物扒竊"], description: "讓裝備實際裝備在魔物身上，但選單林克也有裝備的方法。", sources: ["/types/totk-09"] },
-  { id: "wst", games: ["totk"], kind: "abbr", abbr: "WST", zh: "詞綴轉移", aliases: ["詞綴轉移", "Moobe WST"], description: "把武器詞綴轉移到其他裝備。", sources: ["/types/totk-06"] },
+  { id: "wst", games: ["totk"], kind: "abbr", abbr: "WST", zh: "裝備屬性轉移", aliases: ["裝備屬性轉移", "詞綴轉移", "Moobe WST"], description: "把武器詞綴轉移到其他裝備。", sources: ["/types/totk-23"] },
   { id: "lsw", games: ["totk"], kind: "abbr", abbr: "LSW", zh: "舉物定位傳送", aliases: ["LSW"], description: "利用舉起物品鎖住林克的座標，藉此瞬間移動到目的地的程錯。", sources: ["/types/totk-17"] },
   { id: "moobe", games: ["totk"], kind: "term", abbr: "Moobe", en: "mulberry's Out of Body Experience", zh: "沐彼", description: "固定林克攀爬的座標，重新計算實際位置時造成超長距離的瞬間移動使周圍呈現未加載的狀態。" },
   { id: "dcd", games: ["totk"], kind: "term", abbr: "DCD", en: "Depth Clip Deleter", description: "物件會使黏合在其上隨後被拆卸的裝備因距離太長而消失。" },
