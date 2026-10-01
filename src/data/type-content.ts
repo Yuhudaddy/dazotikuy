@@ -5323,7 +5323,7 @@ export const typeContent: Record<string, TypeContent> = {
         tab: "Moobe",
         name: "沐彼轉移法（Moobe WST）",
         video: "moobe wst.mov",
-        tags: ["Nintendo Switch"],
+        tags: ["Nintendo Switch（Ver.1.0.0 需要 Zuggle Drop）"],
         steps: [
           "武器裝備好想要的詞綴（或耐久、餘料）",
           "在監視堡壘攀爬在任意物體上",
@@ -5360,7 +5360,7 @@ export const typeContent: Record<string, TypeContent> = {
         tab: "DT DCD",
         name: "穿層刪除轉移法（Depths-Transition DCD WST）",
         video: "depths transition dcd wst.MP4",
-        tags: ["All Versions"],
+        tags: ["All Versions（Ver.1.0.0 需要 Zuggle Drop）"],
         steps: [
           "PSLOT 盾牌 S",
           "將盾牌 S 放在深穴旁邊，並放置一個傳送標記器",
@@ -5376,7 +5376,7 @@ export const typeContent: Record<string, TypeContent> = {
         tab: "DL DCD",
         name: "丟棄限制轉移法（Drop Limit DCD WST）",
         video: "drop limit dcd wst.mp4",
-        tags: ["All Versions"],
+        tags: ["All Versions（Ver.1.0.0 需要 Zuggle Drop）"],
         steps: [
           "將想要被轉移的武器 W1 放地上",
           "丟出一個材料 M，將其黏在 W1 上",
@@ -5395,6 +5395,37 @@ export const typeContent: Record<string, TypeContent> = {
       { text: "__裝備通用__：名稱雖然是「Weapon」，原理上也適用於弓、盾牌。" },
       {
         text: "__增殖裝備__：所有 WST 在最後完成時不選擇「重新卸掉再裝備」來__重置模型__，而是「丟棄(Drop)」，那就會達成「裝備置換(Replace Equipment)」。拿樹枝來做的話，就可以達到增殖裝備的效果。",
+      },
+    ],
+    videos: [
+      {
+        id: "RwfdAWe-S18",
+        title: "回應01 - 1.2.0版可以複製武器嗎？「萊克虛幻手持法(LLSD)」甚至幫你詞綴轉移！",
+        desc: "~Ver.1.2.0限定",
+        at: 1,
+        publishedAt: "2023-08-02",
+      },
+      {
+        id: "80XD1dfAxSk",
+        title: "番外10 - 1.2.1版最方便的武器置換和詞綴轉移！『餘料儲存（Fuse Storage）』",
+        publishedAt: "2024-04-12",
+      },
+      {
+        id: "QlJwMCtnE9A",
+        title: "番外10(會員) - 1.2.1版最方便的武器置換和詞綴轉移！『餘料儲存（Fuse Storage）』與步驟詳細解說(Setup Breakdown)！",
+        publishedAt: "2024-04-11",
+      },
+      {
+        id: "4_l0hNX7JQA",
+        title: "番外13 - 沒有DLC也沒關係！自己搞「永久覺醒的大師之劍（耐久∞＋最高傷害550）」(各版本覺醒全流程｜詞綴轉移詳解)",
+        publishedAt: "2024-06-29",
+      },
+      {
+        id: "0nHE87qDars",
+        title: "番外14 - 最簡單的「詞綴轉移(WST)」！找噁手手製作完美最強英傑武器！",
+        desc: "限定 Nintendo Switch 1",
+        at: 262,
+        publishedAt: "2024-07-06",
       },
     ],
   },
