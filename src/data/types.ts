@@ -20,7 +20,7 @@ export interface TypeItem {
   familyAside?: boolean;
 }
 
-export type GameId = "botw" | "totk" | "eow" | "ssbu" | "aoc" | "aoi";
+export type GameId = "botw" | "totk" | "oot" | "eow" | "ssbu" | "aoc" | "aoi";
 
 export interface TypeGroup {
   game: GameId;
@@ -112,6 +112,14 @@ export const typeGroups: TypeGroup[] = [
     ],
   },
   {
+    game: "oot",
+    label: "時之笛",
+    en: "Ocarina of Time",
+    ja: "オカリナ",
+    shortEn: "Zelda OoT",
+    items: [], // 第一階段只搭骨架，主題頁之後再補（頁面會顯示「整理中」）
+  },
+  {
     game: "eow",
     label: "智慧的再現",
     en: "Echoes of Wisdom",
@@ -129,6 +137,7 @@ export const typeGroups: TypeGroup[] = [
     en: "SSB Ultimate",
     ja: "スマブラSP",
     shortLabel: "大亂鬥",
+    shortEn: "SSBU", // 門扉一排七個後 "SSB Ultimate" 放不下
     items: [
       { no: "01", zh: "入門篇", en: "Beginner's Guide", ja: "入門編", termsOnly: true },
       { no: "02", zh: "初級篇", en: "Elementary Guide", ja: "初級編", termsOnly: true },

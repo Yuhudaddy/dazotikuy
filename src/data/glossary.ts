@@ -11,7 +11,7 @@
 // 同一技巧橫跨多款遊戲時，寫成「一筆、games 填多個」，不要拆成兩筆，
 // 否則索引頁會出現兩列重複的術語。
 
-export type GlossaryGameId = "botw" | "totk" | "eow" | "ssbu" | "aoc" | "aoi";
+export type GlossaryGameId = "botw" | "totk" | "oot" | "eow" | "ssbu" | "aoc" | "aoi";
 
 export interface GlossaryGame {
   id: GlossaryGameId;
@@ -54,6 +54,7 @@ export const glossaryFamilies: Record<string, string> = {
 export const glossaryGames: GlossaryGame[] = [
   { id: "botw", tag: "BotW", label: "曠野之息", title: "Breath of the Wild", aliases: ["BoTW", "Zelda BotW", "薩爾達傳說 曠野之息"] },
   { id: "totk", tag: "TotK", label: "王國之淚", title: "Tears of the Kingdom", aliases: ["ToTK", "Zelda TotK", "薩爾達傳說 王國之淚"] },
+  { id: "oot", tag: "OoT", label: "時之笛", title: "Ocarina of Time", aliases: ["Zelda OoT", "薩爾達傳說 時之笛"] },
   { id: "eow", tag: "EoW", label: "智慧的再現", title: "Echoes of Wisdom", aliases: ["Zelda EoW", "薩爾達傳說 智慧的再現"] },
   { id: "ssbu", tag: "SSBU", label: "任天堂明星大亂鬥特別版", title: "Super Smash Bros. Ultimate", aliases: ["SSB Ultimate", "大亂鬥 SP", "Smash Ultimate"] },
   { id: "aoc", tag: "AoC", label: "災厄啟示錄", title: "Age of Calamity", aliases: ["Zelda AoC", "Hyrule Warriors: Age of Calamity"] },
@@ -245,6 +246,7 @@ export const glossaryEntries: GlossaryEntry[] = [
   { id: "abcs", games: ["totk"], kind: "term", abbr: "ABCS", en: "Autobuild Cancel Slide", zh: "藍圖取消滑行", description: "Ver.1.1.1版以下讓藍圖保持幽體化，可與林克之間相對位置產生的互動關係而高速移動" },
   { id: "kw", games: ["totk"], kind: "term", abbr: "KW", en: "Kinematic Weapons", description: "用特殊方式分離地底黑影手上的武器，這種武器可以保有自己的運動狀態，不受重力、風力的影響。" },
   { id: "ref-fe", games: ["totk"], kind: "abbr", abbr: "ref fe", en: "Reference Fuse Entangle", description: "依賴關係尚未建立的不完整餘料糾纏（FE）。" },
+  { id: "oot", games: ["oot"], kind: "game", abbr: "OoT", en: "Ocarina of Time", ja: "時のオカリナ", zh: "時之笛", aliases: ["Zelda OoT", "薩爾達傳說 時之笛"], description: "《時之笛》的常用英文縮寫。" },
   { id: "eow", games: ["eow"], kind: "game", abbr: "EoW", en: "Echoes of Wisdom", ja: "知恵のかりもの", zh: "智慧的再現", aliases: ["Zelda EoW", "薩爾達傳說 智慧的再現"], description: "《智慧的再現》的常用英文縮寫。" },
   { id: "menu-storage", games: ["eow"], kind: "term", abbr: "Menu Storage", en: "Menu Storage", ja: "メニューストレージ", zh: "選單儲存", aliases: ["選單存留", "儲存"], description: "利用選單狀態保留或延後某些操作結果。", sources: ["/types/eow-01"] },
   { id: "rww", games: ["eow"], kind: "abbr", abbr: "RWW", en: "Random Wrong Warp", zh: "隨機錯傳", aliases: ["隨機錯傳"], description: "游標離開傳送點後被轉成無效資料，按 A 會傳送到隨機區域。", sources: ["/types/eow-01"] },

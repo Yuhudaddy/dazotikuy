@@ -51,15 +51,15 @@ export const quickNav: QuickNavItem[] = [
 ];
 
 export const SITE = {
-  title: "曠野・王國攻略 Wiki",
-  // 日文頁的 <title> 後綴與預設 meta description。站名固定以曠野之息／王國之淚
-  // 代表全站（其餘遊戲各自的日文名稱見 types.ts 的 TypeGroup.ja）。
-  titleJa: "ブレワイ・ティアキン攻略Wiki",
+  title: "新薩爾達攻略 Wiki",
+  // 日文頁的 <title> 後綴與預設 meta description。站名用泛稱，不綁特定作品
+  // （各遊戲的日文名稱見 types.ts 的 TypeGroup.ja）。
+  titleJa: "ゼルダ攻略Wiki",
   shortTitle: "Dazotikuy Shrine",
   description:
-    "薩爾達傳說 曠野之息(BotW) / 王國之淚(TotK) 技巧與 Glitch 攻略，整理自 Yuhudaddy 的 YouTube 頻道。",
+    "薩爾達傳說 曠野之息(BotW) / 王國之淚(TotK) / 時之笛(OoT) 等作品的技巧與 Glitch 攻略，整理自 Yuhudaddy 的 YouTube 頻道。",
   descriptionJa:
-    "ゼルダの伝説 ブレワイ／ティアキンのテクニック・グリッチ攻略。Yuhudaddy の YouTube チャンネルより編集。",
+    "ゼルダの伝説 ブレワイ／ティアキン／オカリナなどのテクニック・グリッチ攻略。Yuhudaddy の YouTube チャンネルより編集。",
   youtube: "https://www.youtube.com/@zb_yuhudaddy",
   discord: "https://discord.com/invite/5V872Y8",
   x: "https://x.com/zb_yuhudaddy",

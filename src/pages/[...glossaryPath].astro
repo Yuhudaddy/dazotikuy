@@ -212,6 +212,10 @@ const searchIndex = (entry: (typeof glossaryEntries)[number]) =>
       opacity: 0.28;
       transition: color 220ms ease, opacity 220ms ease, transform 220ms ease;
     }
+    /* 遊戲數不是 3 的倍數時，落單在最後一列的那個放在中間欄 */
+    .signal-node:last-child:nth-child(3n + 1) {
+      grid-column: 2;
+    }
     .signal-node svg {
       display: block;
       max-width: 100%;
@@ -222,6 +226,7 @@ const searchIndex = (entry: (typeof glossaryEntries)[number]) =>
     }
     .glossary-hero[data-active-game="botw"] .signal-node,
     .glossary-hero[data-active-game="totk"] .signal-node,
+    .glossary-hero[data-active-game="oot"] .signal-node,
     .glossary-hero[data-active-game="eow"] .signal-node,
     .glossary-hero[data-active-game="ssbu"] .signal-node,
     .glossary-hero[data-active-game="aoc"] .signal-node,
@@ -230,6 +235,7 @@ const searchIndex = (entry: (typeof glossaryEntries)[number]) =>
     }
     .glossary-hero[data-active-game="botw"] .signal-node[data-game="botw"],
     .glossary-hero[data-active-game="totk"] .signal-node[data-game="totk"],
+    .glossary-hero[data-active-game="oot"] .signal-node[data-game="oot"],
     .glossary-hero[data-active-game="eow"] .signal-node[data-game="eow"],
     .glossary-hero[data-active-game="ssbu"] .signal-node[data-game="ssbu"],
     .glossary-hero[data-active-game="aoc"] .signal-node[data-game="aoc"],

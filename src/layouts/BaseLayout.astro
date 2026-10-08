@@ -20,8 +20,8 @@ interface Props {
 }
 
 const { title, description, active = "", lang = "zh", altPath } = Astro.props;
-// 站名／預設說明目前只有曠野之息、王國之淚有日文版（見 site.ts），
-// 其餘遊戲的頁面仍會沿用中文站名，等資料層翻譯補齊後再全面日文化。
+// 站名／預設說明中日各一份（見 site.ts），日文頁用 titleJa／descriptionJa，
+// 中文頁用 title／description；各遊戲自己的日文名稱另見 types.ts 的 TypeGroup.ja。
 const siteTitle = lang === "ja" ? SITE.titleJa : SITE.title;
 const siteDescription = lang === "ja" ? SITE.descriptionJa : SITE.description;
 const fullTitle = title ? `${title} · ${siteTitle}` : siteTitle;

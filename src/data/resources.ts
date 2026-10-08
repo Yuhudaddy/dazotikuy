@@ -32,7 +32,7 @@ export interface ResourceCategory {
 }
 
 export interface ResourceGame {
-  game: "botw" | "totk" | "eow" | "ssbu" | "aoc" | "aoi";
+  game: "botw" | "totk" | "oot" | "eow" | "ssbu" | "aoc" | "aoi";
   label: string;
   en: string;
   ja?: string; // 日文版標題用的簡稱（例：botw → ブレワイ）；未填的遊戲日文頁沿用 label
@@ -668,6 +668,14 @@ export const resourceGames: ResourceGame[] = [
     ],
   },
   {
+    game: "oot",
+    label: "時之笛",
+    en: "Ocarina of Time",
+    ja: "オカリナ",
+    shortEn: "Zelda OoT",
+    categories: [],
+  },
+  {
     game: "eow",
     label: "智慧的再現",
     en: "Echoes of Wisdom",
@@ -712,6 +720,7 @@ export const resourceGames: ResourceGame[] = [
     label: "任天堂明星大亂鬥特別版",
     en: "SSB Ultimate",
     shortLabel: "大亂鬥",
+    shortEn: "SSBU", // 門扉一排七個後 "SSB Ultimate" 放不下
     categories: [
       {
         id: "en",

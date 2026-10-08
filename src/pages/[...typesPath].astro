@@ -60,9 +60,9 @@ const groupShortLabel = (group: (typeof typeGroups)[number]) =>
     </div>
   </section>
 
-  {/* 遊戲門扉：桌面一排六個、手機 2x3 */}
+  {/* 遊戲門扉：桌面（xl 以上）所有遊戲排成一排、不寫死個數；平板 4 欄；手機 2 欄且落單的最後一個橫跨兩欄 */}
   <div class="mx-auto max-w-[1244px] px-8 pt-10">
-    <div class="r-game-tabs grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+    <div class="r-game-tabs grid grid-cols-2 gap-3 max-sm:[&>:last-child:nth-child(odd)]:col-span-2 sm:grid-cols-4 xl:grid-flow-col xl:auto-cols-fr xl:grid-cols-none">
       {
         typeGroups.map((group) => (
           <button
@@ -163,7 +163,7 @@ const groupShortLabel = (group: (typeof typeGroups)[number]) =>
   }
 
 <style>
-  /* ── 文件頁籤：桌面一排六個、手機 2x3（沿用資料網站的樣式） ── */
+  /* ── 文件頁籤：xl 以上一排、其餘 4 欄、手機 2 欄（沿用資料網站的樣式） ── */
   .portal {
     height: clamp(52px, 9vw, 64px);
   }

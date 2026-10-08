@@ -189,7 +189,7 @@ const zh = {
   objMapTotkDescription: "TotK Object Map 搜尋語法、欄位篩選與地圖工具使用指南。",
 
   // 資料網站頁（/resources）
-  resourcesDescription: "曠野之息與王國之淚的地圖、數據表、文件與工具連結總整理。",
+  resourcesDescription: "曠野之息、王國之淚等作品的地圖、數據表、文件與工具連結總整理。",
   resourcesEyebrow: "Resource Library · 資料庫",
   resourcesIntro: "攻略本上找不到、最完整的遊戲資料庫。",
   resourcesSearchPlaceholder: "搜尋資源…",
@@ -243,7 +243,7 @@ const zh = {
   homeAboutCopyAfter: "訂閱與留言交流。",
 
   // 術語對照頁（/types/glossary）
-  glossaryDescription: "對照本站六款遊戲的縮寫、英文原名、日文與中文譯名。",
+  glossaryDescription: "對照本站七款遊戲的縮寫、英文原名、日文與中文譯名。",
   glossaryEyebrow: "Reference Index · 術語對照",
   glossaryIntro: "對照各遊戲的縮寫、英文原名、日文與中文譯名；點開條目可看說明與對應的主題頁。",
   glossaryFilterLabel: "依遊戲篩選術語",
@@ -286,7 +286,7 @@ const zh = {
   worksLanguagesLabel: "支援：",
 
   // 主題解說列表頁（/types）
-  typesDescription: "依系列瀏覽 Yuda 頻道的曠野之息與王國之淚攻略內容。",
+  typesDescription: "依系列瀏覽 Yuda 頻道的曠野之息、王國之淚、時之笛等攻略內容。",
   typesEyebrow: "Browse by Series · 系列索引",
   typesIntro: "各遊戲的各種主題的攻略、原理、步驟說明。",
   typesGlossaryLink: "術語對照",
@@ -462,7 +462,7 @@ const ja: Record<keyof typeof zh, string> = {
   objMapTotkTitle: "Léo ティアキン オブジェクトマップ",
   objMapTotkDescription: "TotK Object Map の検索記法・フィールド絞り込み・マップツールの使い方ガイド。",
 
-  resourcesDescription: "ブレワイ・ティアキンのマップ、データ表、解析資料、ツールのリンク集。",
+  resourcesDescription: "ブレワイ・ティアキンなどのマップ、データ表、解析資料、ツールのリンク集。",
   resourcesEyebrow: "Resource Library · 資料庫",
   resourcesIntro: "攻略本には載っていない、最も充実したゲームデータベース。",
   resourcesSearchPlaceholder: "資料を検索…",
@@ -509,7 +509,7 @@ const ja: Record<keyof typeof zh, string> = {
   homeAboutYoutubeLink: "YouTube チャンネル",
   homeAboutCopyAfter: "の登録・コメントでお気軽にどうぞ。",
 
-  glossaryDescription: "当サイトで扱う6作品の略称・英語名・日本語名・中国語名の対照表です。",
+  glossaryDescription: "当サイトで扱う7作品の略称・英語名・日本語名・中国語名の対照表です。",
   glossaryEyebrow: "Reference Index · 用語対照",
   glossaryIntro: "各ゲームの略称・英語名・日本語名・中国語名の対照表。項目を開くと解説と対応するテーマページを表示します。",
   glossaryFilterLabel: "ゲームで絞り込む",
@@ -541,7 +541,7 @@ const ja: Record<keyof typeof zh, string> = {
   worksStatusWip: "開発中",
   worksLanguagesLabel: "対応：",
 
-  typesDescription: "Yuda チャンネルのブレワイ・ティアキン攻略をシリーズ別に閲覧できます。",
+  typesDescription: "Yuda チャンネルのブレワイ・ティアキン・オカリナなどの攻略をシリーズ別に閲覧できます。",
   typesEyebrow: "Browse by Series · シリーズ索引",
   typesIntro: "各ゲームのテーマ別攻略・仕組み・手順の解説。",
   typesGlossaryLink: "用語対照",

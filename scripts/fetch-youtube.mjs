@@ -11,7 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 // 不會再只是靠註解提醒。純警告不中斷——影片資料不該擋住整個網站部署。
 // 放在檔案最前面（早於 API 金鑰檢查）是刻意的：沒有金鑰時腳本會提早結束，
 // 擺在後面的話本機永遠跑不到這段。
-const GAME_IDS = ['botw', 'totk', 'eow', 'ssbu', 'aoc', 'aoi'];
+const GAME_IDS = ['botw', 'totk', 'oot', 'eow', 'ssbu', 'aoc', 'aoi'];
 
 try {
   const typesSrc = readFileSync(join(__dirname, '../src/data/types.ts'), 'utf8');
@@ -60,7 +60,7 @@ function matchKeyword(text, ...keywords) {
   const lower = text.toLowerCase();
   return keywords.some((k) => {
     const kl = k.toLowerCase();
-    // 短英文縮寫（eow / totk / botw / ssbu）用單字邊界比對，避免命中其他英文字內的子字串
+    // 短英文縮寫（eow / totk / botw / oot / ssbu）用單字邊界比對，避免命中其他英文字內的子字串
     if (/^[a-z]{2,5}$/.test(kl)) return new RegExp(`\\b${kl}\\b`, 'i').test(text);
     return lower.includes(kl);
   });
@@ -74,7 +74,7 @@ function leadingTag(title) {
   return m ? m[1] : '';
 }
 
-// 依序比對六款遊戲。useAlias=true 時額外接受頻道慣用簡稱（曠野／王淚），
+// 依序比對七款遊戲。useAlias=true 時額外接受頻道慣用簡稱（曠野／王淚），
 // 只在【】標記內開啟——內文的簡稱不可信，例如
 // 「《禦天之劍》用曠野的心態玩」「等不了王淚手滑買了寶可夢」都不是本傳影片。
 // 兩款無雙一律比對全名：「災厄」「無雙」單獨出現會誤中洛克人的「災厄機器人」
@@ -86,6 +86,7 @@ function pickGame(text, useAlias) {
   if (matchKeyword(text, '智慧的再現', 'eow', 'echoes of wisdom')) return 'eow';
   if (matchKeyword(text, '王國之淚', 'totk', 'tears of the kingdom')) return 'totk';
   if (matchKeyword(text, '曠野之息', 'botw', 'breath of the wild')) return 'botw';
+  if (matchKeyword(text, '時之笛', 'ocarina of time', 'oot')) return 'oot';
   if (useAlias) {
     // ── 跨兩款本傳的影片：以標記中「先出現」的那款為準 ──────────────────
     // 一支影片只能掛一個 game，因此像【曠野&王淚】這種同時涵蓋兩款的，
@@ -168,7 +169,7 @@ for (let i = 0; i < allVideoIds.length; i += 50) {
   allVideos.push(...data.items);
 }
 
-// ── 4. 建立分類陣列（六款遊戲各一）──────────────────────────────────────────
+// ── 4. 建立分類陣列（每款遊戲各一）──────────────────────────────────────────
 const toVideo = (v) => ({
   id: v.id,
   title: v.snippet.title,
