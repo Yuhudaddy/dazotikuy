@@ -5037,6 +5037,13 @@ export const typeContent: Record<string, TypeContent> = {
         text: "解完 4 個神殿前往城堡內部的幻影加儂戰會影響重置覺醒大師劍的 flag，解完任務後會失去覺醒狀態。",
       },
     ],
+    videos: [
+      {
+        id: "dq-Q15Bfff4",
+        title: "番外25 - 全方位解說開場40顆心/3圈精力/序章大師劍的「序章林克繼承（Prolouge Escape）」",
+        publishedAt: "2026-10-04",
+      },
+    ],
   },
 
   "totk-20": {
