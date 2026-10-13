@@ -33,11 +33,11 @@ const videos = rawAll.map((v) => ({
     .toLowerCase(),
 }));
 
-// 篩選鈕：只顯示實際有影片的遊戲，避免出現永遠 0 筆的空按鈕
-const presentGames = new Set(videos.map((v) => v.game).filter(Boolean));
-const facets = gameListFor(lang)
-  .filter(({ id }) => presentGames.has(id))
-  .map(({ id, label }) => ({ key: id, label }));
+// 篩選鈕：列出所有遊戲，包含還沒有影片的新分類（例如時之笛）。
+// 以前只列有影片的遊戲，結果新遊戲在第一支影片上傳前沒有按鈕，
+// 連 /videos?game=oot 這種來自主題頁「全部影片」的連結也會被當成無效而忽略。
+// 點到沒有影片的遊戲會顯示空狀態，並可由篩選提示列清除。
+const facets = gameListFor(lang).map(({ id, label }) => ({ key: id, label }));
 ---
 
 <BaseLayout title={t.navVideos} active="videos" lang={lang} altPath="/videos">
