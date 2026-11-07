@@ -673,7 +673,21 @@ export const resourceGames: ResourceGame[] = [
     en: "Ocarina of Time",
     ja: "オカリナ",
     shortEn: "Zelda OoT",
-    categories: [],
+    categories: [
+      {
+        id: "en",
+        label: "英文資料",
+        en: "English",
+        items: [
+          {
+            title: "Léo 時之笛物件地圖",
+            url: "https://objmap-oot.zeldamods.org/",
+            kind: "map",
+            note: "Created by Léo Lam",
+          },
+        ],
+      },
+    ],
   },
   {
     game: "eow",

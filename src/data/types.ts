@@ -117,7 +117,9 @@ export const typeGroups: TypeGroup[] = [
     en: "Ocarina of Time",
     ja: "オカリナ",
     shortEn: "Zelda OoT",
-    items: [], // 第一階段只搭骨架，主題頁之後再補（頁面會顯示「整理中」）
+    items: [
+      { no: "01", zh: "盾彈跳", en: "Actor Jump" },
+    ],
   },
   {
     game: "eow",

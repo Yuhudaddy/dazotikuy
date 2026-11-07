@@ -57,6 +57,7 @@
 53895591	entrance/bottle-message.mp4
 39778743	eow-lynel/20260710_breaking spam.mp4
 35097968	eow-lynel/20260710_techniques.mp4
+24267466	oot-actor jump/20261107_Actor Jump.mp4
 21558806	ssbu-slingshot/20260709_Slingshot.mp4
 34974197	totk-cull/20260709_Aerocull.mp4
 17570113	totk-cull/20260709_Pyrocull.mp4
