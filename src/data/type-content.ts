@@ -6466,6 +6466,7 @@ export const typeContent: Record<string, TypeContent> = {
       {
         tab: "Actor",
         name: "物件型盾彈跳（Actor Jump）",
+        tags: ["～Ver.1.1.1"],
         video: "20261107_Actor Jump.mp4",
         steps: [
           "切換到成年林克(Adult Link)",
@@ -6482,6 +6483,7 @@ export const typeContent: Record<string, TypeContent> = {
       {
         tab: "Beam",
         name: "魔豆瓣跳（Beam Jump）",
+        tags: ["～Ver.1.1.1"],
         steps: [
           "切換到成年林克(Adult Link)，裝備海利亞盾",
           "移動到魔豆瓣上或切邊，刻意觸發魔豆瓣",
