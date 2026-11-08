@@ -119,6 +119,7 @@ export const typeGroups: TypeGroup[] = [
     shortEn: "Zelda OoT",
     items: [
       { no: "01", zh: "盾彈跳", en: "Actor Jump" },
+      { no: "02", zh: "跳斬取消", en: "Jump Slash Cancel", ja: "ジャンプスラッシュキャンセル", shortEn: "JSC" },
     ],
   },
   {
