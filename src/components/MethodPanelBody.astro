@@ -298,7 +298,7 @@ function mapData(action: FlowMapStepAction, stepNo: number) {
     ))}
   </ul>
 ) : (
-  <ol>
+  <ol start={m.stepStart}>
     {(m.steps ?? []).map((s, idx) => {
       const { text, sub } = stepParts(s);
       // 「參照流程地圖」的步驟單選按鈕：地圖行為以 JSON 塞進 data-map，
