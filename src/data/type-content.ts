@@ -6482,8 +6482,8 @@ export const typeContent: Record<string, TypeContent> = {
         ],
       },
       {
-        tab: "Beam",
-        name: "魔豆瓣跳（Beam Jump）",
+        tab: "Bean",
+        name: "魔豆瓣跳（Bean Jump）",
         tags: ["～Ver.1.1.1"],
         steps: [
           "切換到成年林克(Adult Link)，裝備海利亞盾",
