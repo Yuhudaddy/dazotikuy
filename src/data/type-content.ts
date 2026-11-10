@@ -6528,7 +6528,7 @@ export const typeContent: Record<string, TypeContent> = {
         stepStart: 0,
         steps: [
           "回到標題畫面重新讀取存檔，或到高度上限以下的地方再開始",
-          "按住 ZL，按 A 用__木棒／鐵鎚（Stick／Hammer）__使出跳斬（Jump Slash），此時可以放開 ZL",
+          "按住 ZL，左搖桿往前並按 A，用木棒／鐵鎚使出__跳斬（Jump Slash）__，此時可以放開 ZL（繼續按著也可以）",
           "上升途中按住 R/L，切換成其他道具",
           "放開 R/L 並推進 1 幀（Advance 1 Frame），直到木棒／鐵鎚解除裝備（Unload）",
           "按住 R/L，切換回木棒／鐵鎚",
